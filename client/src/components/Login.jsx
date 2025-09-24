@@ -1,12 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './Login.css';
 
 function Login() {
   const [formData, setFormData] = useState({
     email: '',
-    password: '',
-    role: 'student'
+    password: ''
   });
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
+
+  // ✅ Skip login if already logged in
+  useEffect(() => {
+    if (localStorage.getItem('token')) {
+      navigate('/');
+    }
+  }, [navigate]);
 
   const handleChange = (e) => {
     setFormData({
@@ -15,10 +24,34 @@ function Login() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Login attempt:', formData);
-    // Later Person 3 will connect this to the backend
+    setError('');
+
+    try {
+      const response = await fetch('http://localhost:5000/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setError(data.msg || 'Login failed');
+        return;
+      }
+
+      // Save token + role + id
+      localStorage.setItem('token', data.access_token);
+      localStorage.setItem('role', data.role);
+      localStorage.setItem('user_id', data.user_id);
+
+      // Redirect to dashboard
+      navigate('/');
+    } catch (err) {
+      setError('Something went wrong. Please try again.');
+    }
   };
 
   return (
@@ -49,24 +82,12 @@ function Login() {
               required
             />
           </div>
-          
-          <div className="form-group">
-            <label htmlFor="role">I am a:</label>
-            <select
-              id="role"
-              name="role"
-              value={formData.role}
-              onChange={handleChange}
-            >
-              <option value="student">Student</option>
-              <option value="teacher">Teacher</option>
-              <option value="parent">Parent</option>
-            </select>
-          </div>
-          
+
           <button type="submit" className="login-btn">Login</button>
         </form>
-        
+
+        {error && <p className="error">{error}</p>}
+
         <p>Don't have an account? <a href="/signup">Sign up here</a></p>
       </div>
     </div>

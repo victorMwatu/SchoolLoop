@@ -5,8 +5,10 @@ from flask_migrate import Migrate
 from flask_restful import Api
 from flask_jwt_extended import JWTManager
 import os
+from flask_cors import CORS
 
 # Initialize extensions
+
 db = SQLAlchemy()
 migrate = Migrate()
 api = Api()
@@ -24,6 +26,7 @@ def create_app():
     app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY", "super-secret-key")
 
     # Initialize extensions
+    CORS(app)
     db.init_app(app)
     migrate.init_app(app, db)
     api.init_app(app)

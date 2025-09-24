@@ -1,11 +1,6 @@
 # server/app/routes.py
 from flask_restful import Api
-from app.resources import (
-    StudentListResource,
-    StudentResource,
-    SignupResource,
-    LoginResource,
-)
+from app.resources import SignupResource, LoginResource
 
 def register_resources(api: Api):
     # Auth routes

@@ -32,14 +32,14 @@ class User(db.Model):
     }
 
     
-class Student(db.Model):
-    __tablename__ = "student"
 
+class Student(db.Model):
+    __tablename__ = 'students'  
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
+    email = db.Column(db.String(100), nullable=False)
     student_class = db.Column(db.String(50), nullable=False)
-
-    # Foreign key to User
+                              
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
     user = db.relationship("User", back_populates="student_profile")
 

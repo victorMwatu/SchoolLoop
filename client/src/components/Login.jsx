@@ -10,7 +10,7 @@ function Login() {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  // ✅ Skip login if already logged in
+  //  Skip login if already logged in
   useEffect(() => {
     if (localStorage.getItem('token')) {
       navigate('/');

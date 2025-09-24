@@ -44,13 +44,13 @@ function TeacherDashboard() {
         
         <div className="dashboard-grid">
           <div className="dashboard-card">
-            <h3>📚 My Classes</h3>
+            <h3> My Classes</h3>
             <p>Manage your classes and students</p>
             <button className="card-btn">View Classes</button>
           </div>
           
           <div className="dashboard-card">
-            <h3>📝 Assignments</h3>
+            <h3> Assignments</h3>
             <p>Create and manage assignments</p>
             <button className="card-btn" onClick={handleManageAssignments}>
               Manage Assignments
@@ -58,13 +58,13 @@ function TeacherDashboard() {
           </div>
           
           <div className="dashboard-card">
-            <h3>💬 Communication</h3>
+            <h3> Communication</h3>
             <p>Send notes to parents and students</p>
             <button className="card-btn">Send Messages</button>
           </div>
           
           <div className="dashboard-card">
-            <h3>📊 Progress Reports</h3>
+            <h3> Progress Reports</h3>
             <p>View student performance</p>
             <button className="card-btn">View Reports</button>
           </div>

@@ -29,7 +29,6 @@ def create_app():
     CORS(app)
     db.init_app(app)
     migrate.init_app(app, db)
-    api.init_app(app)
     jwt.init_app(app)
 
     # Import models so migrations detect them
@@ -38,5 +37,7 @@ def create_app():
     # Register resources (API endpoints)
     from app.routes import register_resources
     register_resources(api)
+
+    api.init_app(app)
 
     return app

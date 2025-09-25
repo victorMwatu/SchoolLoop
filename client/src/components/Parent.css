@@ -486,19 +486,566 @@
   margin: 0.5rem 0;
 }
 
+/* Progress View Styles */
+.progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+}
+
+.student-summary h3 {
+  color: #333;
+  margin: 0 0 0.5rem 0;
+  font-size: 1.5rem;
+}
+
+.student-summary p {
+  color: #666;
+  margin: 0.25rem 0;
+}
+
+.overall-gpa {
+  text-align: center;
+}
+
+.gpa-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.gpa-number {
+  font-size: 3rem;
+  font-weight: bold;
+  color: #007bff;
+  line-height: 1;
+}
+
+.gpa-label {
+  font-size: 0.9rem;
+  color: #666;
+  margin-top: 0.25rem;
+}
+
+.progress-overview {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.subjects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.subject-progress-card {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.subject-progress-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.subject-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.subject-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.subject-info h3 {
+  color: #333;
+  margin: 0 0 0.25rem 0;
+  font-size: 1.1rem;
+}
+
+.teacher-name {
+  color: #666;
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.grade-display {
+  text-align: right;
+}
+
+.current-grade {
+  font-size: 1.5rem;
+  font-weight: bold;
+  display: block;
+}
+
+.percentage {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  background-color: #e9ecef;
+  border-radius: 4px;
+  overflow: hidden;
+  margin: 1rem 0;
+}
+
+.progress-fill {
+  height: 100%;
+  transition: width 0.3s ease;
+}
+
+.subject-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 0.5rem;
+  margin: 1rem 0;
+  font-size: 0.875rem;
+}
+
+.stat-item {
+  display: flex;
+  justify-content: space-between;
+  color: #666;
+}
+
+.trend-improving {
+  color: #28a745;
+}
+
+.trend-declining {
+  color: #dc3545;
+}
+
+.trend-stable {
+  color: #6c757d;
+}
+
+.recent-scores {
+  margin: 1rem 0;
+}
+
+.recent-scores strong {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #333;
+  font-size: 0.9rem;
+}
+
+.scores-list {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.score-badge {
+  padding: 0.25rem 0.5rem;
+  border-radius: 12px;
+  color: white;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.upcoming-tests {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+}
+
+.upcoming-tests h3 {
+  color: #333;
+  margin: 0 0 1rem 0;
+}
+
+.tests-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.test-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem;
+  background: #f8f9fa;
+  border-radius: 4px;
+  border-left: 3px solid #007bff;
+}
+
+.test-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.test-subject {
+  font-weight: 500;
+  color: #333;
+}
+
+.test-type {
+  font-size: 0.8rem;
+  color: #666;
+}
+
+.test-date {
+  font-weight: 500;
+  color: #007bff;
+}
+
+/* Calendar View Styles */
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+}
+
+.calendar-controls {
+  display: flex;
+  gap: 1rem;
+}
+
+.month-selector,
+.year-selector {
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.calendar-info p {
+  color: #666;
+  margin: 0;
+}
+
+.event-legend {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.legend-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.legend-dot.event-meeting {
+  background-color: #007bff;
+}
+
+.legend-dot.event-exam {
+  background-color: #dc3545;
+}
+
+.legend-dot.event-school {
+  background-color: #28a745;
+}
+
+.legend-dot.event-holiday {
+  background-color: #6c757d;
+}
+
+.legend-dot.event-academic {
+  background-color: #fd7e14;
+}
+
+.upcoming-events-section,
+.all-events-section {
+  margin-bottom: 2rem;
+}
+
+.upcoming-events-section h3,
+.all-events-section h3 {
+  color: #333;
+  margin-bottom: 1rem;
+}
+
+.events-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 1.5rem;
+}
+
+.calendar-event-card {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+  transition: transform 0.2s, box-shadow 0.2s;
+  border-left: 4px solid #ddd;
+}
+
+.calendar-event-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.calendar-event-card.event-meeting {
+  border-left-color: #007bff;
+}
+
+.calendar-event-card.event-exam {
+  border-left-color: #dc3545;
+}
+
+.calendar-event-card.event-school {
+  border-left-color: #28a745;
+}
+
+.calendar-event-card.event-holiday {
+  border-left-color: #6c757d;
+}
+
+.calendar-event-card.event-academic {
+  border-left-color: #fd7e14;
+}
+
+.calendar-event-card.important {
+  box-shadow: 0 2px 12px rgba(255, 193, 7, 0.3);
+}
+
+.event-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.event-icon {
+  font-size: 1.5rem;
+  margin-right: 0.75rem;
+}
+
+.event-date-info h4 {
+  color: #333;
+  margin: 0 0 0.25rem 0;
+  font-size: 1.1rem;
+}
+
+.event-date,
+.event-time {
+  color: #666;
+  margin: 0.1rem 0;
+  font-size: 0.9rem;
+}
+
+.important-badge {
+  background-color: #ffc107;
+  color: #856404;
+  padding: 0.25rem 0.5rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.event-details {
+  margin: 1rem 0;
+}
+
+.event-description {
+  color: #666;
+  line-height: 1.5;
+  margin-bottom: 0.5rem;
+}
+
+.event-location,
+.event-time {
+  color: #666;
+  font-size: 0.875rem;
+  margin: 0.25rem 0;
+}
+
+.event-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.event-actions button {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  flex: 1;
+}
+
+.btn-event-details {
+  background-color: #17a2b8;
+  color: white;
+}
+
+.btn-event-details:hover {
+  background-color: #138496;
+}
+
+.btn-add-calendar {
+  background-color: #28a745;
+  color: white;
+}
+
+.btn-add-calendar:hover {
+  background-color: #218838;
+}
+
+.events-timeline {
+  position: relative;
+  padding-left: 2rem;
+}
+
+.events-timeline::before {
+  content: '';
+  position: absolute;
+  left: 1rem;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background-color: #e9ecef;
+}
+
+.timeline-event {
+  position: relative;
+  padding: 1rem 0 1rem 1rem;
+  border-left: 2px solid transparent;
+}
+
+.timeline-marker {
+  position: absolute;
+  left: -8px;
+  top: 1.5rem;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: #007bff;
+}
+
+.timeline-event.event-meeting .timeline-marker {
+  background-color: #007bff;
+}
+
+.timeline-event.event-exam .timeline-marker {
+  background-color: #dc3545;
+}
+
+.timeline-event.event-school .timeline-marker {
+  background-color: #28a745;
+}
+
+.timeline-event.event-holiday .timeline-marker {
+  background-color: #6c757d;
+}
+
+.timeline-event.event-academic .timeline-marker {
+  background-color: #fd7e14;
+}
+
+.timeline-content {
+  background: white;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.timeline-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.timeline-icon {
+  font-size: 1.2rem;
+}
+
+.timeline-header h4 {
+  color: #333;
+  margin: 0;
+  flex: 1;
+}
+
+.timeline-date {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.timeline-description {
+  color: #666;
+  margin: 0.5rem 0;
+  line-height: 1.5;
+}
+
+.timeline-location,
+.timeline-time {
+  color: #666;
+  font-size: 0.875rem;
+  margin: 0.25rem 0;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .parent-view-container {
     padding: 1rem;
   }
   
-  .assignments-grid {
+  .assignments-grid,
+  .subjects-grid,
+  .events-grid {
     grid-template-columns: 1fr;
   }
   
   .assignment-header,
-  .message-header {
+  .message-header,
+  .subject-header {
     flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .progress-header {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+  
+  .calendar-header {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .event-legend {
     gap: 1rem;
   }
   
@@ -510,12 +1057,24 @@
   }
   
   .assignment-actions,
-  .message-actions {
+  .message-actions,
+  .event-actions {
     flex-direction: column;
   }
   
   .assignments-overview,
-  .messages-overview {
+  .messages-overview,
+  .progress-overview {
     grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .subject-stats {
+    grid-template-columns: 1fr;
+  }
+  
+  .test-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
   }
 }

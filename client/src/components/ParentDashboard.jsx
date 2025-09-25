@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import ParentAssignmentView from './ParentAssignmentView';
 import ParentMessageView from './ParentMessageView';
+import ParentProgressView from './ParentProgressView';
+import SchoolCalendarView from './SchoolCalendarView';
 import './Dashboard.css';
 
 function ParentDashboard({ user }) {
@@ -27,6 +29,10 @@ function ParentDashboard({ user }) {
     setCurrentView('progress');
   };
 
+  const handleViewCalendar = () => {
+    setCurrentView('calendar');
+  };
+
   const handleBackToDashboard = () => {
     setCurrentView('dashboard');
   };
@@ -40,17 +46,11 @@ function ParentDashboard({ user }) {
   }
 
   if (currentView === 'progress') {
-    return (
-      <div className="dashboard-container">
-        <div className="view-header">
-          <button className="btn-back" onClick={handleBackToDashboard}>
-            ← Back to Dashboard
-          </button>
-          <h2>Academic Progress</h2>
-        </div>
-        <p>Progress tracking will be implemented next...</p>
-      </div>
-    );
+    return <ParentProgressView user={user} onBack={handleBackToDashboard} />;
+  }
+
+  if (currentView === 'calendar') {
+    return <SchoolCalendarView user={user} onBack={handleBackToDashboard} />;
   }
 
   return (
@@ -107,7 +107,9 @@ function ParentDashboard({ user }) {
         <div className="dashboard-card">
           <h3>📅 School Calendar</h3>
           <p>View school events, holidays, and important dates</p>
-          <button className="card-btn">View Calendar</button>
+          <button className="card-btn" onClick={handleViewCalendar}>
+            View Calendar
+          </button>
         </div>
       </div>
 

@@ -6,49 +6,49 @@ function StudentAssignmentView({ onBack }) {
   const [assignments] = useState([
     {
       id: 1,
-      title: 'Math Homework Chapter 5',
-      subject: 'Mathematics',
-      teacher: 'Mrs. Johnson',
+      title: 'Build a React Calculator App',
+      subject: 'Frontend Development',
+      teacher: 'Sarah Chen',
       dueDate: '2025-09-28',
       assignedDate: '2025-09-22',
-      description: 'Complete exercises 1-20 from Chapter 5',
-      instructions: 'Show all work clearly. Use pencil and paper.',
+      description: 'Create a fully functional calculator using React with hooks',
+      instructions: 'Use functional components, useState hook, handle all basic operations (+, -, *, /). Style with CSS. Deploy to Netlify.',
       status: 'pending',
       priority: 'normal'
     },
     {
       id: 2,
-      title: 'Science Lab Report',
-      subject: 'Science',
-      teacher: 'Mr. Davis',
+      title: 'API Integration Project',
+      subject: 'Backend Development',
+      teacher: 'James Mwangi',
       dueDate: '2025-09-30',
       assignedDate: '2025-09-23',
-      description: 'Write a lab report on the photosynthesis experiment',
-      instructions: 'Include hypothesis, method, results, and conclusion.',
+      description: 'Build a REST API using Flask and integrate with a database',
+      instructions: 'Create endpoints for CRUD operations. Use PostgreSQL. Include error handling and validation. Write unit tests.',
       status: 'pending',
       priority: 'high'
     },
     {
       id: 3,
-      title: 'English Essay',
-      subject: 'English',
-      teacher: 'Ms. Smith',
+      title: 'Data Analysis with Python',
+      subject: 'Data Science',
+      teacher: 'Dr. Grace Njeri',
       dueDate: '2025-09-25',
       assignedDate: '2025-09-20',
-      description: 'Write a 500-word essay on "My Hero"',
-      instructions: 'Use proper grammar and cite sources if needed.',
+      description: 'Analyze sales data and create visualizations using Pandas and Matplotlib',
+      instructions: 'Clean the dataset, perform statistical analysis, create 5+ charts. Submit Jupyter notebook.',
       status: 'overdue',
       priority: 'urgent'
     },
     {
       id: 4,
-      title: 'History Timeline',
-      subject: 'History',
-      teacher: 'Mr. Brown',
+      title: 'Mobile App Prototype',
+      subject: 'Mobile Development',
+      teacher: 'Kevin Ochieng',
       dueDate: '2025-10-02',
       assignedDate: '2025-09-24',
-      description: 'Create a timeline of World War II events',
-      instructions: 'Include at least 10 major events with dates.',
+      description: 'Design and prototype a mobile app using React Native',
+      instructions: 'Create wireframes, implement basic navigation, add at least 3 screens. Focus on user experience.',
       status: 'completed',
       priority: 'normal'
     }
@@ -89,15 +89,19 @@ function StudentAssignmentView({ onBack }) {
 
   const getSubjectIcon = (subject) => {
     const icons = {
-      'Mathematics': '🔢',
-      'Science': '🔬',
-      'English': '📚',
-      'History': '🏛️',
-      'Geography': '🌍',
-      'Art': '🎨',
-      'Physical Education': '⚽'
+      'Frontend Development': '⚛️',
+      'Backend Development': '�',
+      'Data Science': '�',
+      'Mobile Development': '📱',
+      'DevOps': '�',
+      'Machine Learning': '🤖',
+      'Cybersecurity': '🔒',
+      'Web Development': '�',
+      'Database Design': '🗃️',
+      'UI/UX Design': '🎨',
+      'Software Engineering': '💻'
     };
-    return icons[subject] || '📖';
+    return icons[subject] || '�';
   };
 
   return (

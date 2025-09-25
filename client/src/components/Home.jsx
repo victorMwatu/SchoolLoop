@@ -9,10 +9,13 @@ const Home = () => {
       <nav className="home-nav">
         <div className="nav-content">
           <div className="logo-section">
-            <h1 className="school-logo">🏫 SchoolLoop</h1>
-            <p className="school-tagline">Your School Management System</p>
+            <h1 className="school-logo">🚀 Moringa SchoolLoop</h1>
+            <p className="school-tagline">Africa's Premier Tech Bootcamp</p>
           </div>
           <div className="nav-links">
+            <a href="#features" className="nav-link">Programs</a>
+            <a href="#courses" className="nav-link">Courses</a>
+            <a href="#about" className="nav-link">About</a>
             <Link to="/login" className="nav-link">Login</Link>
             <Link to="/signup" className="nav-link signup-link">Sign Up</Link>
           </div>
@@ -23,24 +26,46 @@ const Home = () => {
       <section className="hero-section">
         <div className="hero-content">
           <h1 className="hero-title">
-            Welcome to <span className="highlight">SchoolLoop</span>
+            Shape Your Future with <span className="highlight">Africa's Top Tech Bootcamp</span>
           </h1>
           <p className="hero-subtitle">
-            Connecting Teachers, Students, and Parents in One Comprehensive Platform
+            Whether you are a student or professional, Moringa School offers world-class
+            tech training tailored to your journey.
           </p>
           <p className="hero-description">
-            Streamline your school experience with our all-in-one management system. 
-            Track assignments, communicate with teachers, monitor progress, and stay 
-            updated with school events.
+            Master Software Engineering, Data Science, Cybersecurity, AI, and more. 
+            Join thousands of graduates who've transformed their careers with our 
+            intensive, hands-on bootcamp programs.
           </p>
+          
+          {/* Tech Learning Features */}
+          <div className="tech-features">
+            <div className="feature-item">
+              <span className="feature-icon">⏰</span>
+              <span>Full-time Bootcamps</span>
+            </div>
+            <div className="feature-item">
+              <span className="feature-icon">🗓️</span>
+              <span>Part-time Classes</span>
+            </div>
+            <div className="feature-item">
+              <span className="feature-icon">💻</span>
+              <span>Remote Learning</span>
+            </div>
+            <div className="feature-item">
+              <span className="feature-icon">🏫</span>
+              <span>In-person Training</span>
+            </div>
+          </div>
+          
           <div className="hero-buttons">
-            <Link to="/login" className="btn btn-primary">Get Started</Link>
-            <a href="#features" className="btn btn-secondary">Learn More</a>
+            <Link to="/signup" className="btn btn-primary">Start Your Journey</Link>
+            <a href="#features" className="btn btn-secondary">Explore Programs</a>
           </div>
         </div>
         <div className="hero-image">
           <div className="hero-illustration">
-            📚 🎓 👨‍🏫 👩‍🎓 📊
+            � � ⚡ � �️
           </div>
         </div>
       </section>
@@ -48,76 +73,109 @@ const Home = () => {
       {/* Features Section */}
       <section id="features" className="features-section">
         <div className="section-content">
-          <h2 className="section-title">Everything You Need for School Management</h2>
+          <h2 className="section-title">Everything You Need for Tech Education Management</h2>
           <div className="features-grid">
             <div className="feature-card">
-              <div className="feature-icon">👨‍🏫</div>
-              <h3>For Teachers</h3>
+              <div className="feature-icon">👨‍💻</div>
+              <h3>For Instructors</h3>
               <ul>
-                <li>Create and manage assignments</li>
-                <li>Communicate with parents</li>
-                <li>Track student progress</li>
-                <li>Send announcements</li>
+                <li>Create coding assignments & projects</li>
+                <li>Share technical resources</li>
+                <li>Track coding progress & skills</li>
+                <li>Conduct code reviews</li>
+                <li>Manage bootcamp curriculum</li>
               </ul>
-              <Link to="/login" className="feature-btn">Teacher Login</Link>
+              <Link to="/login" className="feature-btn">Instructor Login</Link>
             </div>
             
             <div className="feature-card">
-              <div className="feature-icon">👩‍🎓</div>
+              <div className="feature-icon">�</div>
               <h3>For Students</h3>
               <ul>
-                <li>View assignments and due dates</li>
-                <li>Submit homework online</li>
-                <li>Read teacher messages</li>
-                <li>Track academic progress</li>
+                <li>Access coding challenges</li>
+                <li>Submit GitHub repositories</li>
+                <li>Join pair programming sessions</li>
+                <li>Track technical skills growth</li>
+                <li>Connect with tech mentors</li>
               </ul>
               <Link to="/login" className="feature-btn">Student Login</Link>
             </div>
             
             <div className="feature-card">
-              <div className="feature-icon">👨‍👩‍👧‍👦</div>
-              <h3>For Parents</h3>
+              <div className="feature-icon">�</div>
+              <h3>For Career Services</h3>
               <ul>
-                <li>Monitor child's assignments</li>
-                <li>Communicate with teachers</li>
-                <li>View academic progress</li>
-                <li>Acknowledge school notices</li>
+                <li>Monitor coding progress</li>
+                <li>Track job readiness</li>
+                <li>View portfolio development</li>
+                <li>Access bootcamp updates</li>
+                <li>Support career transition</li>
               </ul>
-              <Link to="/login" className="feature-btn">Parent Login</Link>
+              <Link to="/login" className="feature-btn">Career Login</Link>
             </div>
           </div>
         </div>
       </section>
 
-      {/* School Info Section - Customizable for your school */}
+      {/* Tech Courses Section */}
+      <section id="courses" className="courses-section">
+        <div className="section-content">
+          <h2 className="section-title">Our Tech Programs</h2>
+          <p className="section-subtitle">Choose from our industry-leading bootcamp programs</p>
+          <div className="courses-grid">
+            <button className="course-btn active">Software Engineering</button>
+            <button className="course-btn">Data Science</button>
+            <button className="course-btn">Cybersecurity</button>
+            <button className="course-btn">AI & Machine Learning</button>
+            <button className="course-btn">Tech Leadership</button>
+            <button className="course-btn">Mobile Development</button>
+          </div>
+          <div className="course-details">
+            <div className="course-info">
+              <h3>Full-Stack Software Engineering</h3>
+              <p>Master modern web development with React, Node.js, Python, and database technologies. Build real-world applications and deploy to the cloud.</p>
+              <div className="course-features">
+                <span className="course-tag">15 Weeks</span>
+                <span className="course-tag">Full-time</span>
+                <span className="course-tag">Job Guarantee</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* School Info Section - Moringa School Info */}
       <section className="school-info-section">
         <div className="section-content">
-          <h2 className="section-title">About Our School</h2>
+          <h2 className="section-title">About Moringa School</h2>
           <div className="school-info-grid">
             <div className="info-card">
-              <div className="info-icon">🎯</div>
+              <div className="info-icon">🚀</div>
               <h3>Our Mission</h3>
               <p>
-                To provide quality education and foster a collaborative environment 
-                between teachers, students, and parents through innovative technology.
+                To nurture Africa's tech talent by providing world-class coding bootcamps 
+                that bridge the gap between education and industry needs. We create 
+                skilled developers ready for the global tech market.
               </p>
             </div>
             
             <div className="info-card">
-              <div className="info-icon">📈</div>
-              <h3>Academic Excellence</h3>
+              <div className="info-icon">�</div>
+              <h3>Hands-on Learning</h3>
               <p>
-                Track student progress with real-time updates, comprehensive 
-                grade reporting, and detailed academic analytics.
+                Learn by building real projects. Our curriculum focuses on practical 
+                skills with mentorship from industry experts, pair programming, 
+                and project-based assessments.
               </p>
             </div>
             
             <div className="info-card">
-              <div className="info-icon">🤝</div>
-              <h3>Community</h3>
+              <div className="info-icon">🌍</div>
+              <h3>Impact & Community</h3>
               <p>
-                Building strong connections between all stakeholders in the 
-                educational process through effective communication tools.
+                Join a vibrant community of 3000+ alumni working at top tech companies 
+                across Africa and globally. 85% job placement rate within 6 months 
+                of graduation.
               </p>
             </div>
           </div>

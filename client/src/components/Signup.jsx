@@ -151,7 +151,10 @@ function Signup({ setUser }) {
 
         {serverError && <p className="error">{serverError}</p>}
 
-        <p>Already have an account? <a href="/login">Login here</a></p>
+        <div className="form-links">
+          <p>Already have an account? <a href="/login">Login here</a></p>
+          <p><a href="/">← Back to Home</a></p>
+        </div>
       </div>
     </div>
   );

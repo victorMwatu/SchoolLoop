@@ -46,7 +46,7 @@ function Login({ setUser }) {
       setUser(mockUser);
 
       // Navigate to dashboard
-      navigate('/');
+      navigate('/dashboard');
     } catch (err) {
       setError('Login failed. Please try again.');
     } finally {
@@ -104,7 +104,10 @@ function Login({ setUser }) {
 
         {error && <div className="error-message">{error}</div>}
 
-        <p>Don't have an account? <a href="/signup">Sign up here</a></p>
+        <div className="form-links">
+          <p>Don't have an account? <a href="/signup">Sign up here</a></p>
+          <p><a href="/">← Back to Home</a></p>
+        </div>
       </div>
     </div>
   );

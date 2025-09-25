@@ -1,49 +1,138 @@
-import React from 'react';
+import React, { useState } from 'react';
+import ParentAssignmentView from './ParentAssignmentView';
+import ParentMessageView from './ParentMessageView';
+import ParentProgressView from './ParentProgressView';
+import SchoolCalendarView from './SchoolCalendarView';
 import './Dashboard.css';
 
-function ParentDashboard() {
+function ParentDashboard({ user }) {
+  const [currentView, setCurrentView] = useState('dashboard');
+
+  // Mock data for child information - later Person 3 will connect to backend
+  const [childInfo] = useState({
+    name: 'John Doe',
+    grade: '10th Grade',
+    teacher: 'Mrs. Johnson',
+    classroom: 'Room 204',
+    studentId: 'STU001'
+  });
+
+  const handleViewAssignments = () => {
+    setCurrentView('assignments');
+  };
+
+  const handleViewMessages = () => {
+    setCurrentView('messages');
+  };
+
+  const handleViewProgress = () => {
+    setCurrentView('progress');
+  };
+
+  const handleViewCalendar = () => {
+    setCurrentView('calendar');
+  };
+
+  const handleBackToDashboard = () => {
+    setCurrentView('dashboard');
+  };
+
+  if (currentView === 'assignments') {
+    return <ParentAssignmentView user={user} onBack={handleBackToDashboard} />;
+  }
+
+  if (currentView === 'messages') {
+    return <ParentMessageView user={user} onBack={handleBackToDashboard} />;
+  }
+
+  if (currentView === 'progress') {
+    return <ParentProgressView user={user} onBack={handleBackToDashboard} />;
+  }
+
+  if (currentView === 'calendar') {
+    return <SchoolCalendarView user={user} onBack={handleBackToDashboard} />;
+  }
+
   return (
     <div className="dashboard-container">
       <div className="dashboard-header">
         <h1>Parent Dashboard</h1>
-        <p>Monitor your child's academic progress and school communications</p>
+        <p>Welcome, {user?.name || 'Parent'}!</p>
       </div>
       
+      {/* Child Information Card */}
+      <div className="child-info-card">
+        <h3>👨‍🎓 Child Information</h3>
+        <div className="child-details">
+          <div className="detail-item">
+            <strong>Name:</strong> {childInfo.name}
+          </div>
+          <div className="detail-item">
+            <strong>Grade:</strong> {childInfo.grade}
+          </div>
+          <div className="detail-item">
+            <strong>Teacher:</strong> {childInfo.teacher}
+          </div>
+          <div className="detail-item">
+            <strong>Classroom:</strong> {childInfo.classroom}
+          </div>
+        </div>
+      </div>
+
       <div className="dashboard-grid">
         <div className="dashboard-card">
-          <h3> My Children</h3>
-          <p>View your children's profiles</p>
-          <button className="card-btn">View Children</button>
+          <h3>📚 Child's Assignments</h3>
+          <p>View your child's assignments, due dates, and progress</p>
+          <button className="card-btn" onClick={handleViewAssignments}>
+            View Assignments
+          </button>
         </div>
         
         <div className="dashboard-card">
-          <h3> Assignments</h3>
-          <p>See your child's homework and deadlines</p>
-          <button className="card-btn">View Assignments</button>
+          <h3>📧 Teacher Messages</h3>
+          <p>Read messages from teachers and provide acknowledgments</p>
+          <button className="card-btn" onClick={handleViewMessages}>
+            View Messages
+          </button>
         </div>
         
         <div className="dashboard-card">
-          <h3> Academic Progress</h3>
-          <p>Track grades and performance</p>
-          <button className="card-btn">View Progress</button>
+          <h3>📊 Academic Progress</h3>
+          <p>Track your child's academic performance and grades</p>
+          <button className="card-btn" onClick={handleViewProgress}>
+            View Progress
+          </button>
         </div>
         
         <div className="dashboard-card">
-          <h3> Communications</h3>
-          <p>Messages from teachers and school</p>
-          <button className="card-btn">Check Messages</button>
+          <h3>📅 School Calendar</h3>
+          <p>View school events, holidays, and important dates</p>
+          <button className="card-btn" onClick={handleViewCalendar}>
+            View Calendar
+          </button>
         </div>
-        
-        <div className="dashboard-card">
-          <h3> Acknowledgements</h3>
-          <p>Notes requiring your signature</p>
-          <button className="card-btn">View Pending</button>
-        </div>
-        
-        <div className="dashboard-card">
-          <h3> School Events</h3>
-          <p>Upcoming events and meetings</p>
-          <button className="card-btn">View Events</button>
+      </div>
+
+      {/* Quick Overview Section */}
+      <div className="dashboard-overview">
+        <h3>Quick Overview</h3>
+        <div className="overview-stats">
+          <div className="stat-item">
+            <span className="stat-number">5</span>
+            <span className="stat-label">Active Assignments</span>
+          </div>
+          <div className="stat-item">
+            <span className="stat-number">3</span>
+            <span className="stat-label">New Messages</span>
+          </div>
+          <div className="stat-item">
+            <span className="stat-number">2</span>
+            <span className="stat-label">Pending Acknowledgments</span>
+          </div>
+          <div className="stat-item">
+            <span className="stat-number">B+</span>
+            <span className="stat-label">Current Grade</span>
+          </div>
         </div>
       </div>
     </div>

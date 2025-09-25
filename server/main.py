@@ -1,5 +1,5 @@
 from flask import Flask
-from models import db, User, RoleEnum  # import from models.py
+from app.models import db, User, RoleEnum  # import from app/models.py
 
 def create_app():
     app = Flask(__name__)

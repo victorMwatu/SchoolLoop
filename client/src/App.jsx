@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Navigation from './components/Navigation';
+import Home from './components/Home';
 import Dashboard from './components/Dashboard';
 import TeacherDashboard from './components/TeacherDashboard';
 import StudentDashboard from './components/StudentDashboard';
@@ -34,13 +35,13 @@ function App() {
     
     switch (user.role) {
       case 'teacher':
-        return <TeacherDashboard />;
+        return <TeacherDashboard user={user} />;
       case 'student':
-        return <StudentDashboard />;
+        return <StudentDashboard user={user} />;
       case 'parent':
-        return <ParentDashboard />;
+        return <ParentDashboard user={user} />;
       default:
-        return <Dashboard />;
+        return <Dashboard user={user} />;
     }
   };
 
@@ -55,19 +56,21 @@ function App() {
   return (
     <Router>
       <div className="App">
-        <Navigation user={user} setUser={setUser} />
+        {/* Only show Navigation on dashboard pages, not on Home page */}
+        {user && <Navigation user={user} setUser={setUser} />}
+        
         <Routes>
           <Route
             path="/"
-            element={getDashboardComponent()}
+            element={!user ? <Home /> : <Navigate to="/dashboard" replace />}
           />
           <Route 
             path="/login" 
-            element={!user ? <Login setUser={setUser} /> : <Navigate to="/" />}
+            element={!user ? <Login setUser={setUser} /> : <Navigate to="/dashboard" replace />}
           />
           <Route 
             path="/signup" 
-            element={!user ? <Signup setUser={setUser} /> : <Navigate to="/" />}
+            element={!user ? <Signup setUser={setUser} /> : <Navigate to="/dashboard" replace />}
           />
           <Route
             path="/dashboard"

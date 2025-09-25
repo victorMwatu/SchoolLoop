@@ -1,52 +1,58 @@
 # server/models.py
 from flask_sqlalchemy import SQLAlchemy
-import enum
+from werkzeug.security import generate_password_hash, check_password_hash
 
-# ✅ Define db here
 db = SQLAlchemy()
 
-# Enum for roles
-class UserRole(enum.Enum):
-    STUDENT = "STUDENT"
-    TEACHER = "TEACHER"
-    PARENT = "PARENT"
-
 class User(db.Model):
-    __tablename__ = "user"
-
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), nullable=False)
+    username = db.Column(db.String(80), unique=True, nullable=False)
+    role = db.Column(db.String(20), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
-    password_hash = db.Column(db.String(200), nullable=False)
-    role = db.Column(db.Enum(UserRole), nullable=False)
+    password_hash = db.Column(db.String(128), nullable=False)
 
-    # One-to-one with Student (later you can make it one-to-many)
-    student_profile = db.relationship("Student", back_populates="user", uselist=False)
+    # --- Add these methods ---
+    def set_password(self, password):
+        self.password_hash = generate_password_hash(password)
 
-    def to_dict(self):
-     return {
-        "id": self.id,
-        "name": self.name,
-        "student_class": self.student_class,
-        "teacher_id": self.user_id
-    }
-
-    
-
+    def check_password(self, password):
+        return check_password_hash(self.password_hash, password)
 class Student(db.Model):
-    __tablename__ = 'students'  
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), nullable=False)
-    email = db.Column(db.String(100), nullable=False)
-    student_class = db.Column(db.String(50), nullable=False)
-                              
-    user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
-    user = db.relationship("User", back_populates="student_profile")
+    name = db.Column(db.String(120), nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+    student_class = db.Column(db.String(20), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"))   # link to User
 
     def to_dict(self):
-        return {
-            "id": self.id,
-            "name": self.name,
-            "class": self.student_class,
-            "user_id": self.user_id
-        }
+        return {"id": self.id, "name": self.name, "email": self.email, "student_class": self.student_class}
+
+
+class Teacher(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(120), nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+    subject = db.Column(db.String(50), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
+
+    def to_dict(self):
+        return {"id": self.id, "name": self.name, "email": self.email, "subject": self.subject}
+
+
+class Parent(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(120), nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+    phone = db.Column(db.String(20))
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
+
+    def to_dict(self):
+        return {"id": self.id, "name": self.name, "email": self.email, "phone": self.phone}
+
+
+class Assignment(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(200))
+    description = db.Column(db.Text)
+    student_id = db.Column(db.Integer)
+    teacher_id = db.Column(db.Integer)

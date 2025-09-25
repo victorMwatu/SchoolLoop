@@ -2,14 +2,15 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Navigation.css';
 
-function Navigation() {
+function Navigation({ user, setUser }) {
   const navigate = useNavigate();
-  const isLoggedIn = !!localStorage.getItem('token');
 
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('role');
     localStorage.removeItem('user_id');
+    localStorage.removeItem('user');
+    setUser(null);
     navigate('/login');
   };
 
@@ -22,16 +23,19 @@ function Navigation() {
         
         <div className="nav-menu">
           <a href="/" className="nav-link">Home</a>
-          {!isLoggedIn && (
+          {!user && (
             <>
               <a href="/login" className="nav-link">Login</a>
               <a href="/signup" className="nav-link">Sign Up</a>
             </>
           )}
-          {isLoggedIn && (
-            <button onClick={handleLogout} className="nav-link logout-btn">
-              Logout
-            </button>
+          {user && (
+            <>
+              <span className="user-info">Hello, {user.name} ({user.role})</span>
+              <button onClick={handleLogout} className="nav-link logout-btn">
+                Logout
+              </button>
+            </>
           )}
         </div>
       </div>

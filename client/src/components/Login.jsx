@@ -1,21 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Login.css';
 
-function Login() {
+function Login({ setUser }) {
   const [formData, setFormData] = useState({
     email: '',
-    password: ''
+    password: '',
+    role: 'student'
   });
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-
-  // ✅ Skip login if already logged in
-  useEffect(() => {
-    if (localStorage.getItem('token')) {
-      navigate('/');
-    }
-  }, [navigate]);
 
   const handleChange = (e) => {
     setFormData({
@@ -27,30 +22,35 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    setLoading(true);
 
     try {
-      const response = await fetch('http://localhost:5000/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
-      });
+      // For now, simulate login with mock data (later Person 3 will connect to real backend)
+      // Simulate API delay
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      // Mock user data based on role selected
+      const mockUser = {
+        id: 1,
+        name: formData.role === 'teacher' ? 'Mrs. Johnson' : 
+              formData.role === 'student' ? 'John Doe' : 'Jane Parent',
+        email: formData.email,
+        role: formData.role
+      };
 
-      const data = await response.json();
+      // Save to localStorage
+      localStorage.setItem('token', 'mock-jwt-token');
+      localStorage.setItem('user', JSON.stringify(mockUser));
 
-      if (!response.ok) {
-        setError(data.msg || 'Login failed');
-        return;
-      }
+      // Update app state
+      setUser(mockUser);
 
-      // Save token + role + id
-      localStorage.setItem('token', data.access_token);
-      localStorage.setItem('role', data.role);
-      localStorage.setItem('user_id', data.user_id);
-
-      // Redirect to dashboard
+      // Navigate to dashboard
       navigate('/');
     } catch (err) {
-      setError('Something went wrong. Please try again.');
+      setError('Login failed. Please try again.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -82,11 +82,27 @@ function Login() {
               required
             />
           </div>
+          
+          <div className="form-group">
+            <label htmlFor="role">I am a:</label>
+            <select
+              id="role"
+              name="role"
+              value={formData.role}
+              onChange={handleChange}
+            >
+              <option value="student">Student</option>
+              <option value="teacher">Teacher</option>
+              <option value="parent">Parent</option>
+            </select>
+          </div>
 
-          <button type="submit" className="login-btn">Login</button>
+          <button type="submit" className="login-btn" disabled={loading}>
+            {loading ? 'Logging in...' : 'Login'}
+          </button>
         </form>
 
-        {error && <p className="error">{error}</p>}
+        {error && <div className="error-message">{error}</div>}
 
         <p>Don't have an account? <a href="/signup">Sign up here</a></p>
       </div>

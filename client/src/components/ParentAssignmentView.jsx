@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import './Parent.css';
+import './ParentDashboard.css';
+import '../styles/design-system.css';
 
 function ParentAssignmentView({ user, onBack }) {
   // Sample assignments data - later Person 3 will connect to backend
@@ -145,102 +147,196 @@ function ParentAssignmentView({ user, onBack }) {
   };
 
   return (
-    <div className="parent-view-container">
-      <div className="view-header">
-        <button className="btn-back" onClick={onBack}>
+    <div className="parent-dashboard-container">
+      {/* Header */}
+      <div className="dashboard-header">
+        <button className="btn btn-secondary btn-sm" onClick={onBack}>
           ← Back to Dashboard
         </button>
-        <h2>Child's Assignments</h2>
-      </div>
-
-      {/* Overview Cards */}
-      <div className="assignments-overview">
-        <div className="overview-card pending">
-          <h3>{pendingAssignments}</h3>
-          <p>Pending Assignments</p>
-        </div>
-        <div className="overview-card completed">
-          <h3>{completedAssignments}</h3>
-          <p>Completed Assignments</p>
-        </div>
-        <div className="overview-card overdue">
-          <h3>{overdueAssignments}</h3>
-          <p>Overdue Assignments</p>
-        </div>
-        <div className="overview-card total">
-          <h3>{totalAssignments}</h3>
-          <p>Total Assignments</p>
-        </div>
-        <div className="overview-card grade">
-          <h3>{averageGrade}%</h3>
-          <p>Average Grade</p>
+        <div className="header-content">
+          <h1 className="font-heading font-bold text-4xl text-gray-800">Child's Academic Overview</h1>
+          <p className="text-lg text-gray-600">Track your child's assignments, progress, and communication</p>
         </div>
       </div>
 
-      {/* Assignments Grid */}
-      <div className="assignments-grid">
-        {assignments.map(assignment => (
-          <div key={assignment.id} className={`assignment-card ${getStatusClass(assignment.status)}`}>
-            <div className="assignment-header">
-              <div className="assignment-info">
-                <span className="subject-icon">{getSubjectIcon(assignment.subject)}</span>
-                <div>
-                  <h3>{assignment.title}</h3>
-                  <p className="subject-teacher">{assignment.subject} - {assignment.teacher}</p>
+      {/* Quick Stats Overview */}
+      <div className="stats-grid">
+        <div className="stat-card pending">
+          <div className="stat-icon">📝</div>
+          <div className="stat-content">
+            <h3 className="text-2xl font-bold text-gray-800">{pendingAssignments}</h3>
+            <p className="text-sm text-gray-600">Pending Assignments</p>
+            <div className="stat-badge badge-warning">Needs Attention</div>
+          </div>
+        </div>
+        
+        <div className="stat-card completed">
+          <div className="stat-icon">✅</div>
+          <div className="stat-content">
+            <h3 className="text-2xl font-bold text-gray-800">{completedAssignments}</h3>
+            <p className="text-sm text-gray-600">Completed</p>
+            <div className="stat-badge badge-success">Great Job!</div>
+          </div>
+        </div>
+        
+        <div className="stat-card overdue">
+          <div className="stat-icon">⚠️</div>
+          <div className="stat-content">
+            <h3 className="text-2xl font-bold text-gray-800">{overdueAssignments}</h3>
+            <p className="text-sm text-gray-600">Overdue</p>
+            {overdueAssignments > 0 && <div className="stat-badge badge-error">Action Required</div>}
+          </div>
+        </div>
+        
+        <div className="stat-card grade">
+          <div className="stat-icon">🎯</div>
+          <div className="stat-content">
+            <h3 className="text-2xl font-bold text-gray-800">{averageGrade}%</h3>
+            <p className="text-sm text-gray-600">Average Grade</p>
+            <div className={`stat-badge ${averageGrade >= 80 ? 'badge-success' : averageGrade >= 70 ? 'badge-warning' : 'badge-error'}`}>
+              {averageGrade >= 80 ? 'Excellent' : averageGrade >= 70 ? 'Good' : 'Needs Improvement'}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Main Content Sections */}
+      <div className="dashboard-content-grid">
+        {/* Assignments Section */}
+        <div className="content-section">
+          <div className="section-header">
+            <h2 className="font-heading font-semibold text-2xl text-gray-800">Current Assignments</h2>
+            <span className="text-sm text-gray-500">{assignments.length} total assignments</span>
+          </div>
+          
+          <div className="assignments-list">
+            {assignments.map(assignment => (
+              <div key={assignment.id} className="assignment-item card">
+                <div className="assignment-item-header">
+                  <div className="assignment-meta">
+                    <span className="subject-icon">{getSubjectIcon(assignment.subject)}</span>
+                    <div className="assignment-info">
+                      <h3 className="font-semibold text-lg text-gray-800">{assignment.title}</h3>
+                      <p className="text-sm text-gray-600">{assignment.subject} • {assignment.teacher}</p>
+                    </div>
+                  </div>
+                  <div className="assignment-status">
+                    <div className={`assignment-status-badge ${assignment.submissionStatus === 'completed' ? 'badge-success' : 
+                      assignment.submissionStatus === 'submitted' ? 'badge-info' : 
+                      assignment.submissionStatus === 'in_progress' ? 'badge-warning' : 'badge-error'}`}>
+                      {getSubmissionStatusText(assignment.submissionStatus)}
+                    </div>
+                  </div>
                 </div>
-              </div>
-              <div className="due-info">
-                <span className="due-badge">{getDaysUntilDue(assignment.dueDate)}</span>
-                <div className="status-info">
-                  <span className="submission-status">{getSubmissionStatusText(assignment.submissionStatus)}</span>
-                  {assignment.grade && (
-                    <span className="grade">{assignment.grade}/{assignment.points}</span>
+
+                <div className="assignment-item-content">
+                  <p className="text-gray-700 mb-4">{assignment.description}</p>
+                  
+                  <div className="assignment-details-grid">
+                    <div className="detail-item">
+                      <span className="detail-label">Due Date</span>
+                      <span className={`detail-value ${assignment.status === 'overdue' ? 'text-red-600 font-medium' : 
+                        assignment.status === 'urgent' ? 'text-orange-600 font-medium' : 'text-gray-700'}`}>
+                        {new Date(assignment.dueDate).toLocaleDateString()}
+                        <span className="text-xs block text-gray-500">{getDaysUntilDue(assignment.dueDate)}</span>
+                      </span>
+                    </div>
+                    
+                    <div className="detail-item">
+                      <span className="detail-label">Points</span>
+                      <span className="detail-value">{assignment.points} pts</span>
+                    </div>
+                    
+                    {assignment.grade && (
+                      <div className="detail-item">
+                        <span className="detail-label">Grade</span>
+                        <span className={`detail-value font-semibold ${assignment.grade >= 80 ? 'text-green-600' : 
+                          assignment.grade >= 70 ? 'text-yellow-600' : 'text-red-600'}`}>
+                          {assignment.grade}/{assignment.points} ({Math.round((assignment.grade/assignment.points)*100)}%)
+                        </span>
+                      </div>
+                    )}
+                  </div>
+
+                  {assignment.feedback && (
+                    <div className="teacher-feedback-box">
+                      <h4 className="feedback-label">Teacher Feedback</h4>
+                      <p className="feedback-text">{assignment.feedback}</p>
+                    </div>
                   )}
                 </div>
-              </div>
-            </div>
 
-            <div className="assignment-content">
-              <div className="description">{assignment.description}</div>
-              
-              <div className="assignment-details">
-                <p><strong>Assigned:</strong> {new Date(assignment.assignedDate).toLocaleDateString()}</p>
-                <p><strong>Due:</strong> {new Date(assignment.dueDate).toLocaleDateString()}</p>
-                <p><strong>Points:</strong> {assignment.points}</p>
-              </div>
-
-              {assignment.feedback && (
-                <div className="teacher-feedback">
-                  <strong>Teacher Feedback:</strong>
-                  <p>{assignment.feedback}</p>
+                <div className="assignment-item-actions">
+                  <button 
+                    className="btn btn-primary btn-sm"
+                    onClick={() => handleViewDetails(assignment)}
+                  >
+                    View Full Details
+                  </button>
+                  <button 
+                    className="btn btn-secondary btn-sm"
+                    onClick={() => handleContactTeacher(assignment.teacher, assignment.subject)}
+                  >
+                    Contact {assignment.teacher.split(' ')[1]}
+                  </button>
                 </div>
-              )}
-            </div>
+              </div>
+            ))}
+          </div>
 
-            <div className="assignment-actions">
-              <button 
-                className="btn-view-details"
-                onClick={() => handleViewDetails(assignment)}
-              >
-                View Details
+          {assignments.length === 0 && (
+            <div className="empty-state-card card">
+              <div className="empty-icon">📚</div>
+              <h3 className="font-semibold text-lg text-gray-700 mb-2">No assignments yet</h3>
+              <p className="text-gray-500">Your child's assignments will appear here once teachers post them.</p>
+            </div>
+          )}
+        </div>
+
+        {/* Quick Actions Sidebar */}
+        <div className="sidebar-section">
+          <div className="quick-actions-card card">
+            <h3 className="font-heading font-semibold text-lg text-gray-800 mb-4">Quick Actions</h3>
+            <div className="actions-list">
+              <button className="action-button">
+                <span className="action-icon">💬</span>
+                <span>Message Teachers</span>
               </button>
-              <button 
-                className="btn-contact-teacher"
-                onClick={() => handleContactTeacher(assignment.teacher, assignment.subject)}
-              >
-                Contact Teacher
+              <button className="action-button">
+                <span className="action-icon">📊</span>
+                <span>View Progress Report</span>
+              </button>
+              <button className="action-button">
+                <span className="action-icon">📅</span>
+                <span>School Calendar</span>
+              </button>
+              <button className="action-button">
+                <span className="action-icon">📋</span>
+                <span>Download Summary</span>
               </button>
             </div>
           </div>
-        ))}
-      </div>
 
-      {assignments.length === 0 && (
-        <div className="empty-state">
-          <p>No assignments found.</p>
-          <p>Check back later for new assignments.</p>
+          <div className="upcoming-deadlines-card card">
+            <h3 className="font-heading font-semibold text-lg text-gray-800 mb-4">Upcoming Deadlines</h3>
+            <div className="deadlines-list">
+              {assignments
+                .filter(a => a.status !== 'completed' && a.status !== 'overdue')
+                .sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate))
+                .slice(0, 3)
+                .map(assignment => (
+                <div key={assignment.id} className="deadline-item">
+                  <div className="deadline-dot"></div>
+                  <div className="deadline-content">
+                    <p className="font-medium text-sm text-gray-800">{assignment.title}</p>
+                    <p className="text-xs text-gray-500">{getDaysUntilDue(assignment.dueDate)}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
-      )}
+      </div>
     </div>
   );
 }

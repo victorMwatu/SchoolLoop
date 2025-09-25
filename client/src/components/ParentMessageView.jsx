@@ -1,224 +1,354 @@
 import React, { useState } from 'react';
 import './Parent.css';
+import './MessageChat.css';
+import '../styles/design-system.css';
 
 function ParentMessageView({ user, onBack }) {
-  // Sample messages from teachers - later Person 3 will connect to backend
-  const [messages, setMessages] = useState([
+  // Sample conversation threads - later Person 3 will connect to backend
+  const [conversations, setConversations] = useState([
     {
       id: 1,
-      from: 'Mrs. Johnson (Mathematics)',
-      subject: 'John\'s Academic Progress',
-      messageType: 'progress_update',
-      priority: 'normal',
-      sentDate: '2025-09-24',
-      isRead: false,
-      requiresAcknowledgment: true,
-      isAcknowledged: false,
-      content: 'I wanted to update you on John\'s progress in mathematics this semester. He has shown significant improvement in his problem-solving skills and is actively participating in class discussions. His test scores have improved by 15% since the beginning of the term.',
-      acknowledgmentText: 'Please acknowledge that you have read this progress update.'
+      teacher: {
+        name: 'Mrs. Johnson',
+        subject: 'Mathematics',
+        avatar: null, // Will show initials
+        initials: 'MJ'
+      },
+      lastMessage: 'Great progress on the algebra homework!',
+      lastMessageDate: '2025-09-25T14:30:00',
+      unreadCount: 2,
+      isOnline: true
     },
     {
       id: 2,
-      from: 'Mr. Davis (Science)',
-      subject: 'Lab Safety Reminder',
-      messageType: 'announcement',
-      priority: 'high',
-      sentDate: '2025-09-23',
-      isRead: true,
-      requiresAcknowledgment: true,
-      isAcknowledged: false,
-      content: 'Dear parents, we will be conducting chemistry experiments next week that require special safety equipment. Please ensure your child brings safety goggles and a lab coat. If you need to purchase these items, they are available at the school store.',
-      acknowledgmentText: 'I acknowledge that I have read the lab safety requirements and will ensure my child has the necessary equipment.'
+      teacher: {
+        name: 'Mr. Davis',
+        subject: 'Science',
+        avatar: null,
+        initials: 'MD'
+      },
+      lastMessage: 'Please bring safety goggles for next week\'s lab',
+      lastMessageDate: '2025-09-25T10:15:00',
+      unreadCount: 0,
+      isOnline: false
     },
     {
       id: 3,
-      from: 'Ms. Wilson (English Literature)',
-      subject: 'Excellent Essay Submission',
-      messageType: 'praise',
-      priority: 'normal',
-      sentDate: '2025-09-22',
-      isRead: true,
-      requiresAcknowledgment: false,
-      isAcknowledged: false,
-      content: 'John submitted an outstanding character analysis essay on "To Kill a Mockingbird". His understanding of the themes and character development was impressive. He earned an A- on this assignment. Keep encouraging him to read more classic literature!'
+      teacher: {
+        name: 'Ms. Wilson',
+        subject: 'English Literature',
+        avatar: null,
+        initials: 'MW'
+      },
+      lastMessage: 'Excellent character analysis essay!',
+      lastMessageDate: '2025-09-24T16:20:00',
+      unreadCount: 0,
+      isOnline: true
     },
     {
       id: 4,
-      from: 'Principal Anderson',
-      subject: 'Parent-Teacher Conference Scheduling',
-      messageType: 'meeting_request',
-      priority: 'high',
-      sentDate: '2025-09-21',
-      isRead: false,
-      requiresAcknowledgment: true,
-      isAcknowledged: false,
-      content: 'Parent-teacher conferences are scheduled for October 5-7. Please log into the school portal to schedule your preferred time slots with your child\'s teachers. Conferences will be held both in-person and virtually.',
-      acknowledgmentText: 'I acknowledge that I have received the parent-teacher conference information and will schedule my appointments by September 30th.'
-    },
-    {
-      id: 5,
-      from: 'Mr. Brown (History)',
-      subject: 'Field Trip Permission Required',
-      messageType: 'permission_slip',
-      priority: 'urgent',
-      sentDate: '2025-09-20',
-      isRead: true,
-      requiresAcknowledgment: true,
-      isAcknowledged: true,
-      acknowledgedDate: '2025-09-21',
-      content: 'We have planned an educational field trip to the National History Museum on October 15th. The trip will cost $25 per student and includes transportation and museum entry. Please complete the attached permission slip and return it by October 1st.',
-      acknowledgmentText: 'I give permission for my child to participate in the field trip and understand the associated costs and requirements.'
+      teacher: {
+        name: 'Principal Anderson',
+        subject: 'Administration',
+        avatar: null,
+        initials: 'PA'
+      },
+      lastMessage: 'Parent-teacher conference scheduled for Oct 5th',
+      lastMessageDate: '2025-09-23T09:00:00',
+      unreadCount: 1,
+      isOnline: false
     }
   ]);
 
-  const getMessageTypeIcon = (messageType) => {
-    switch (messageType) {
-      case 'progress_update': return '📊';
-      case 'announcement': return '📢';
-      case 'praise': return '🌟';
-      case 'meeting_request': return '📅';
-      case 'permission_slip': return '📝';
-      case 'concern': return '⚠️';
-      default: return '💌';
+  // Sample chat messages for active conversation
+  const [chatMessages, setChatMessages] = useState([
+    {
+      id: 1,
+      senderId: 'teacher_1',
+      senderName: 'Mrs. Johnson',
+      senderType: 'teacher',
+      content: 'Hello! I wanted to update you on John\'s progress in mathematics this semester.',
+      timestamp: '2025-09-25T09:00:00',
+      isRead: true
+    },
+    {
+      id: 2,
+      senderId: 'teacher_1',
+      senderName: 'Mrs. Johnson',
+      senderType: 'teacher',
+      content: 'He has shown significant improvement in his problem-solving skills and is actively participating in class discussions. His test scores have improved by 15% since the beginning of the term.',
+      timestamp: '2025-09-25T09:01:00',
+      isRead: true
+    },
+    {
+      id: 3,
+      senderId: 'parent_1',
+      senderName: 'Parent',
+      senderType: 'parent',
+      content: 'That\'s wonderful to hear! We\'ve been working with him on his homework every evening.',
+      timestamp: '2025-09-25T12:30:00',
+      isRead: true
+    },
+    {
+      id: 4,
+      senderId: 'teacher_1',
+      senderName: 'Mrs. Johnson',
+      senderType: 'teacher',
+      content: 'It really shows! Keep up the great work. I have some additional practice worksheets if you think John would benefit from them.',
+      timestamp: '2025-09-25T13:45:00',
+      isRead: true
+    },
+    {
+      id: 5,
+      senderId: 'teacher_1',
+      senderName: 'Mrs. Johnson',
+      senderType: 'teacher',
+      content: 'Also, we have a math competition coming up next month. John shows great potential and I\'d love to recommend him if he\'s interested.',
+      timestamp: '2025-09-25T14:30:00',
+      isRead: false
+    }
+  ]);
+
+  const [activeConversation, setActiveConversation] = useState(conversations[0]);
+  const [newMessage, setNewMessage] = useState('');
+  const [isTyping, setIsTyping] = useState(false);
+
+  // Helper functions
+  const formatMessageTime = (timestamp) => {
+    const date = new Date(timestamp);
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const messageDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    
+    if (messageDate.getTime() === today.getTime()) {
+      return date.toLocaleTimeString('en-US', { 
+        hour: 'numeric', 
+        minute: '2-digit', 
+        hour12: true 
+      });
+    } else {
+      return date.toLocaleDateString('en-US', { 
+        month: 'short', 
+        day: 'numeric' 
+      });
     }
   };
 
-  const markAsRead = (messageId) => {
-    setMessages(messages.map(message => 
-      message.id === messageId 
-        ? { ...message, isRead: true }
-        : message
+  const getInitialsColor = (name) => {
+    const colors = [
+      '#2563EB', '#DC2626', '#059669', '#D97706', 
+      '#7C3AED', '#BE185D', '#0891B2', '#65A30D'
+    ];
+    const index = name.charCodeAt(0) % colors.length;
+    return colors[index];
+  };
+
+  const selectConversation = (conversation) => {
+    setActiveConversation(conversation);
+    // Mark conversation as read
+    setConversations(conversations.map(conv => 
+      conv.id === conversation.id 
+        ? { ...conv, unreadCount: 0 }
+        : conv
     ));
   };
 
-  const acknowledgeMessage = (messageId) => {
-    const today = new Date().toISOString().split('T')[0];
-    setMessages(messages.map(message => 
-      message.id === messageId 
-        ? { ...message, isAcknowledged: true, acknowledgedDate: today, isRead: true }
-        : message
+  const handleSendMessage = (e) => {
+    e.preventDefault();
+    if (!newMessage.trim()) return;
+    
+    const newMsg = {
+      id: chatMessages.length + 1,
+      senderId: 'parent_1',
+      senderName: 'Parent',
+      senderType: 'parent',
+      content: newMessage,
+      timestamp: new Date().toISOString(),
+      isRead: true
+    };
+    
+    setChatMessages([...chatMessages, newMsg]);
+    setNewMessage('');
+    
+    // Update last message in conversation
+    setConversations(conversations.map(conv => 
+      conv.id === activeConversation.id 
+        ? { ...conv, lastMessage: newMessage, lastMessageDate: new Date().toISOString() }
+        : conv
     ));
+    
+    // Simulate teacher typing response
+    setIsTyping(true);
+    setTimeout(() => {
+      setIsTyping(false);
+      const teacherResponse = {
+        id: chatMessages.length + 2,
+        senderId: activeConversation.teacher.name.toLowerCase().replace(' ', '_'),
+        senderName: activeConversation.teacher.name,
+        senderType: 'teacher',
+        content: 'Thank you for the message! I\'ll get back to you soon.',
+        timestamp: new Date().toISOString(),
+        isRead: false
+      };
+      setChatMessages(prev => [...prev, teacherResponse]);
+    }, 2000);
   };
 
-  const handleReply = (messageId, senderName) => {
-    alert(`Reply functionality to ${senderName} will be implemented in the inbox system.`);
-  };
-
-  // Calculate overview statistics
-  const unreadMessages = messages.filter(m => !m.isRead).length;
-  const pendingAcknowledgments = messages.filter(m => m.requiresAcknowledgment && !m.isAcknowledged).length;
-  const acknowledgedMessages = messages.filter(m => m.isAcknowledged).length;
-  const totalMessages = messages.length;
+  // Calculate statistics
+  const totalUnread = conversations.reduce((sum, conv) => sum + conv.unreadCount, 0);
+  const totalConversations = conversations.length;
+  const activeTeachers = conversations.filter(conv => conv.teacher.isOnline).length;
 
   return (
-    <div className="parent-view-container">
-      <div className="view-header">
-        <button className="btn-back" onClick={onBack}>
+    <div className="chat-container">
+      {/* Header */}
+      <div className="chat-header">
+        <button className="btn btn-secondary btn-sm" onClick={onBack}>
           ← Back to Dashboard
         </button>
-        <h2>Messages from Teachers</h2>
-      </div>
-
-      {/* Overview Cards */}
-      <div className="messages-overview">
-        <div className="overview-card unread">
-          <h3>{unreadMessages}</h3>
-          <p>Unread Messages</p>
-        </div>
-        <div className="overview-card response-needed">
-          <h3>{pendingAcknowledgments}</h3>
-          <p>Pending Acknowledgments</p>
-        </div>
-        <div className="overview-card acknowledged">
-          <h3>{acknowledgedMessages}</h3>
-          <p>Acknowledged</p>
-        </div>
-        <div className="overview-card total">
-          <h3>{totalMessages}</h3>
-          <p>Total Messages</p>
+        <div className="header-info">
+          <h1 className="font-heading font-bold text-2xl text-gray-800">Messages</h1>
+          <div className="header-stats">
+            <span className="stat-item">
+              <span className="stat-number">{totalUnread}</span>
+              <span className="stat-label">Unread</span>
+            </span>
+            <span className="stat-divider">•</span>
+            <span className="stat-item">
+              <span className="stat-number">{activeTeachers}</span>
+              <span className="stat-label">Online</span>
+            </span>
+          </div>
         </div>
       </div>
 
-      {/* Messages List */}
-      <div className="messages-list">
-        {messages.map(message => (
-          <div 
-            key={message.id} 
-            className={`message-card ${!message.isRead ? 'unread' : ''} ${message.requiresAcknowledgment && !message.isAcknowledged ? 'requires-acknowledgment' : ''}`}
-          >
-            <div className="message-header">
-              <div className="message-info">
-                <span className="message-icon">{getMessageTypeIcon(message.messageType)}</span>
-                <div className="message-details">
-                  <h3>{message.subject}</h3>
-                  <p className="sender">{message.from}</p>
-                  <p className="date">{new Date(message.sentDate).toLocaleDateString()}</p>
+      {/* Chat Layout */}
+      <div className="chat-layout">
+        {/* Conversations Sidebar */}
+        <div className="conversations-sidebar">
+          <div className="sidebar-header">
+            <h2 className="sidebar-title">Conversations</h2>
+            <span className="conversation-count">{totalConversations}</span>
+          </div>
+          
+          <div className="conversations-list">
+            {conversations.map(conversation => (
+              <div 
+                key={conversation.id}
+                className={`conversation-item ${activeConversation.id === conversation.id ? 'active' : ''}`}
+                onClick={() => selectConversation(conversation)}
+              >
+                <div className="conversation-avatar">
+                  <div 
+                    className="avatar-circle"
+                    style={{ backgroundColor: getInitialsColor(conversation.teacher.name) }}
+                  >
+                    {conversation.teacher.initials}
+                  </div>
+                  {conversation.teacher.isOnline && <div className="online-indicator"></div>}
                 </div>
+                
+                <div className="conversation-content">
+                  <div className="conversation-header">
+                    <h3 className="teacher-name">{conversation.teacher.name}</h3>
+                    <span className="last-message-time">
+                      {formatMessageTime(conversation.lastMessageDate)}
+                    </span>
+                  </div>
+                  <div className="conversation-preview">
+                    <span className="subject-label">{conversation.teacher.subject}</span>
+                    <p className="last-message">{conversation.lastMessage}</p>
+                  </div>
+                </div>
+                
+                {conversation.unreadCount > 0 && (
+                  <div className="unread-badge">{conversation.unreadCount}</div>
+                )}
               </div>
-              <div className="message-status">
-                <span className={`priority-badge priority-${message.priority}`}>
-                  {message.priority}
-                </span>
-                {!message.isRead && (
-                  <span className="unread-badge">New</span>
-                )}
-                {message.requiresAcknowledgment && !message.isAcknowledged && (
-                  <span className="acknowledgment-badge">Acknowledgment Required</span>
-                )}
-                {message.isAcknowledged && (
-                  <span className="acknowledged-badge">Acknowledged</span>
-                )}
-              </div>
-            </div>
+            ))}
+          </div>
+        </div>
 
-            <div className="message-content">
-              <p className="message-text">{message.content}</p>
-              
-              {message.requiresAcknowledgment && (
-                <div className="acknowledgment-section">
-                  <h4>{message.isAcknowledged ? 'Acknowledgment Completed' : 'Acknowledgment Required'}</h4>
-                  <p>{message.acknowledgmentText}</p>
-                  {message.isAcknowledged && (
-                    <p><strong>Acknowledged on:</strong> {new Date(message.acknowledgedDate).toLocaleDateString()}</p>
+        {/* Chat Area */}
+        <div className="chat-area">
+          {/* Chat Header */}
+          <div className="chat-area-header">
+            <div className="active-conversation-info">
+              <div 
+                className="teacher-avatar"
+                style={{ backgroundColor: getInitialsColor(activeConversation.teacher.name) }}
+              >
+                {activeConversation.teacher.initials}
+              </div>
+              <div className="teacher-details">
+                <h3 className="teacher-name">{activeConversation.teacher.name}</h3>
+                <p className="teacher-subject">
+                  {activeConversation.teacher.subject}
+                  {activeConversation.teacher.isOnline && (
+                    <span className="online-status">• Online</span>
                   )}
-                </div>
-              )}
-            </div>
-
-            <div className="message-actions">
-              {message.requiresAcknowledgment && (
-                <button 
-                  className="btn-acknowledge"
-                  onClick={() => acknowledgeMessage(message.id)}
-                  disabled={message.isAcknowledged}
-                >
-                  {message.isAcknowledged ? '✓ Acknowledged' : 'Acknowledge'}
-                </button>
-              )}
-              <button 
-                className="btn-reply"
-                onClick={() => handleReply(message.id, message.from)}
-              >
-                Reply
-              </button>
-              <button 
-                className="btn-mark-read"
-                onClick={() => markAsRead(message.id)}
-                disabled={message.isRead}
-              >
-                {message.isRead ? 'Read' : 'Mark as Read'}
-              </button>
+                </p>
+              </div>
             </div>
           </div>
-        ))}
-      </div>
 
-      {messages.length === 0 && (
-        <div className="empty-state">
-          <p>No messages found.</p>
-          <p>You will receive notifications here when teachers send messages.</p>
+          {/* Messages Container */}
+          <div className="messages-container">
+            {chatMessages.map(message => (
+              <div 
+                key={message.id} 
+                className={`message-bubble ${message.senderType === 'teacher' ? 'teacher-message' : 'parent-message'}`}
+              >
+                <div className="message-content">
+                  <p>{message.content}</p>
+                  <span className="message-time">
+                    {formatMessageTime(message.timestamp)}
+                  </span>
+                </div>
+              </div>
+            ))}
+            
+            {isTyping && (
+              <div className="message-bubble teacher-message typing">
+                <div className="typing-indicator">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Message Input */}
+          <div className="message-input-area">
+            <form onSubmit={handleSendMessage} className="message-form">
+              <div className="input-container">
+                <input
+                  type="text"
+                  value={newMessage}
+                  onChange={(e) => setNewMessage(e.target.value)}
+                  placeholder={`Message ${activeConversation.teacher.name}...`}
+                  className="message-input"
+                />
+                <button 
+                  type="button"
+                  className="attachment-button"
+                  title="Attach file"
+                >
+                  📎
+                </button>
+              </div>
+              <button 
+                type="submit" 
+                className="send-button"
+                disabled={!newMessage.trim()}
+              >
+                <span className="send-icon">➤</span>
+              </button>
+            </form>
+          </div>
         </div>
-      )}
+      </div>
     </div>
   );
 }

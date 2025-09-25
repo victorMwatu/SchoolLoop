@@ -1,0 +1,397 @@
+/* =========================================
+   Assignment Create - Teacher Form Styles
+   ========================================= */
+
+/* Main Wrapper */
+.assignment-create-wrapper {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #F8FAFC 0%, #E6F0FF 50%, #F1F5F9 100%);
+  padding: var(--space-6);
+}
+
+.assignment-create-container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* Header */
+.form-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--space-8);
+  padding: var(--space-6);
+  background: var(--white);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--gray-200);
+}
+
+.header-content h1 {
+  margin: 0 0 var(--space-2) 0;
+  background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-dark) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.header-content p {
+  margin: 0;
+  color: var(--gray-600);
+}
+
+/* Main Form Card */
+.assignment-form-card {
+  background: var(--white);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--gray-200);
+  overflow: hidden;
+}
+
+/* Form Grid Layout */
+.form-grid {
+  padding: var(--space-8);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+/* Form Sections */
+.form-section {
+  position: relative;
+}
+
+.section-title {
+  font-family: var(--font-heading);
+  font-size: var(--text-xl);
+  font-weight: var(--font-semibold);
+  color: var(--gray-800);
+  margin: 0 0 var(--space-6) 0;
+  padding-bottom: var(--space-3);
+  border-bottom: 2px solid var(--gray-200);
+  position: relative;
+}
+
+.section-title::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 60px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--primary-blue) 0%, var(--primary-blue-light) 100%);
+}
+
+/* Form Rows */
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-6);
+}
+
+/* Enhanced Form Elements */
+.form-group {
+  margin-bottom: var(--space-6);
+}
+
+.form-label {
+  display: block;
+  font-weight: var(--font-semibold);
+  color: var(--gray-800);
+  margin-bottom: var(--space-3);
+  font-size: var(--text-base);
+}
+
+.form-input,
+.form-textarea,
+.form-select {
+  width: 100%;
+  padding: var(--space-4);
+  border: 2px solid var(--gray-300);
+  border-radius: var(--radius-lg);
+  font-size: var(--text-base);
+  background: var(--white);
+  transition: all var(--transition-base);
+  box-shadow: var(--shadow-sm);
+}
+
+.form-input:focus,
+.form-textarea:focus,
+.form-select:focus {
+  outline: none;
+  border-color: var(--primary-blue);
+  box-shadow: 0 0 0 4px var(--accent-blue), var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+.form-input.error,
+.form-textarea.error,
+.form-select.error {
+  border-color: var(--status-error);
+  box-shadow: 0 0 0 4px var(--status-error-bg);
+}
+
+.form-textarea {
+  resize: vertical;
+  line-height: 1.6;
+}
+
+.form-hint {
+  font-size: var(--text-sm);
+  color: var(--gray-500);
+  margin-top: var(--space-2);
+  font-style: italic;
+}
+
+.form-error {
+  color: var(--status-error);
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  margin-top: var(--space-2);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.form-error::before {
+  content: '⚠️';
+  font-size: var(--text-xs);
+}
+
+/* Checkbox Styling */
+.checkbox-group {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-3);
+}
+
+.form-checkbox {
+  width: 20px;
+  height: 20px;
+  accent-color: var(--primary-blue);
+  cursor: pointer;
+}
+
+.checkbox-label {
+  font-weight: var(--font-medium);
+  color: var(--gray-700);
+  cursor: pointer;
+  margin: 0;
+}
+
+/* Attachment Area */
+.attachment-area {
+  border: 2px dashed var(--gray-300);
+  border-radius: var(--radius-lg);
+  transition: all var(--transition-base);
+}
+
+.attachment-area:hover {
+  border-color: var(--primary-blue);
+  background: var(--accent-blue-light);
+}
+
+.attachment-placeholder {
+  padding: var(--space-8);
+  text-align: center;
+  color: var(--gray-500);
+}
+
+.attachment-icon {
+  font-size: 3rem;
+  margin-bottom: var(--space-3);
+  opacity: 0.6;
+}
+
+.link-button {
+  background: none;
+  border: none;
+  color: var(--primary-blue);
+  text-decoration: underline;
+  cursor: pointer;
+  font-weight: var(--font-medium);
+  padding: 0;
+}
+
+.link-button:hover {
+  color: var(--primary-blue-dark);
+}
+
+/* Form Actions */
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-4);
+  padding: var(--space-6) var(--space-8);
+  background: linear-gradient(135deg, var(--gray-50) 0%, var(--accent-blue-light) 100%);
+  border-top: 1px solid var(--gray-200);
+  margin: 0 -2rem -2rem -2rem;
+  margin-top: var(--space-6);
+}
+
+/* Loading Spinner */
+.loading-spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--white);
+  border-radius: 50%;
+  border-top-color: transparent;
+  animation: spin 1s ease-in-out infinite;
+  margin-right: var(--space-2);
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Priority Indicators */
+.form-select[name="priority"] {
+  position: relative;
+}
+
+.form-select[name="priority"][value="high"] {
+  border-left: 4px solid var(--status-error);
+}
+
+.form-select[name="priority"][value="medium"] {
+  border-left: 4px solid var(--status-warning);
+}
+
+.form-select[name="priority"][value="low"] {
+  border-left: 4px solid var(--status-success);
+}
+
+/* Enhanced Button Styles for Forms */
+.btn-lg {
+  padding: var(--space-4) var(--space-8);
+  font-size: var(--text-lg);
+  min-height: 52px;
+  font-weight: var(--font-semibold);
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* Professional Enhancements */
+.form-section:not(:last-child)::after {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--gray-300) 0%, transparent 100%);
+  margin: var(--space-8) 0 0 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .assignment-create-wrapper {
+    padding: var(--space-4);
+  }
+  
+  .form-header {
+    flex-direction: column;
+    gap: var(--space-4);
+    align-items: flex-start;
+  }
+  
+  .header-content h1 {
+    font-size: var(--text-2xl);
+  }
+  
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+  }
+  
+  .form-grid {
+    padding: var(--space-6);
+  }
+  
+  .form-actions {
+    flex-direction: column-reverse;
+    margin: 0 -1.5rem -1.5rem -1.5rem;
+    padding: var(--space-6);
+  }
+  
+  .form-actions .btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .section-title {
+    font-size: var(--text-lg);
+  }
+  
+  .attachment-placeholder {
+    padding: var(--space-6);
+  }
+  
+  .attachment-icon {
+    font-size: 2rem;
+  }
+}
+
+/* Focus Management */
+.form-input:focus + .form-hint,
+.form-textarea:focus + .form-hint,
+.form-select:focus + .form-hint {
+  color: var(--primary-blue);
+}
+
+/* Success States */
+.form-success {
+  background: var(--status-success-bg);
+  border: 1px solid var(--status-success);
+  color: var(--status-success);
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-6);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.form-success::before {
+  content: '✅';
+}
+
+/* Advanced Visual Enhancements */
+.form-section {
+  position: relative;
+  background: linear-gradient(135deg, transparent 0%, rgba(37, 99, 235, 0.02) 100%);
+  padding: var(--space-6);
+  border-radius: var(--radius-lg);
+  border: 1px solid transparent;
+  transition: all var(--transition-base);
+}
+
+.form-section:hover {
+  border-color: rgba(37, 99, 235, 0.1);
+  background: linear-gradient(135deg, transparent 0%, rgba(37, 99, 235, 0.05) 100%);
+}
+
+/* Form Validation Visual Feedback */
+.form-group.valid .form-input,
+.form-group.valid .form-textarea,
+.form-group.valid .form-select {
+  border-color: var(--status-success);
+}
+
+.form-group.valid::after {
+  content: '✓';
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--status-success);
+  font-weight: bold;
+}

@@ -60,7 +60,6 @@ const Home = () => {
           
           <div className="hero-buttons">
             <Link to="/signup" className="btn btn-primary">Start Your Journey</Link>
-            <a href="#features" className="btn btn-secondary">Explore Programs</a>
           </div>
         </div>
         <div className="hero-image">
@@ -85,7 +84,7 @@ const Home = () => {
                 <li>Conduct code reviews</li>
                 <li>Manage bootcamp curriculum</li>
               </ul>
-              <Link to="/login" className="feature-btn">Instructor Login</Link>
+
             </div>
             
             <div className="feature-card">
@@ -98,7 +97,7 @@ const Home = () => {
                 <li>Track technical skills growth</li>
                 <li>Connect with tech mentors</li>
               </ul>
-              <Link to="/login" className="feature-btn">Student Login</Link>
+
             </div>
             
             <div className="feature-card">
@@ -111,7 +110,7 @@ const Home = () => {
                 <li>Access bootcamp updates</li>
                 <li>Support career transition</li>
               </ul>
-              <Link to="/login" className="feature-btn">Career Login</Link>
+
             </div>
           </div>
         </div>
@@ -122,14 +121,7 @@ const Home = () => {
         <div className="section-content">
           <h2 className="section-title">Our Tech Programs</h2>
           <p className="section-subtitle">Choose from our industry-leading bootcamp programs</p>
-          <div className="courses-grid">
-            <button className="course-btn active">Software Engineering</button>
-            <button className="course-btn">Data Science</button>
-            <button className="course-btn">Cybersecurity</button>
-            <button className="course-btn">AI & Machine Learning</button>
-            <button className="course-btn">Tech Leadership</button>
-            <button className="course-btn">Mobile Development</button>
-          </div>
+
           <div className="course-details">
             <div className="course-info">
               <h3>Full-Stack Software Engineering</h3>

@@ -30,7 +30,7 @@ function App() {
   }, []);
 
   const getDashboardComponent = () => {
-    if (!user) return <Navigate to="/login" />;
+    if (!user) return <Navigate to="/login" replace />;
     
     switch (user.role) {
       case 'teacher':

@@ -20,39 +20,58 @@ function Login({ setUser }) {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError('');
-    setLoading(true);
+  e.preventDefault();
+  setError('');
+  setLoading(true);
 
-    try {
-      // For now, simulate login with mock data (later Person 3 will connect to real backend)
-      // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // Mock user data based on role selected
-      const mockUser = {
-        id: 1,
-        name: formData.role === 'teacher' ? 'Mrs. Johnson' : 
-              formData.role === 'student' ? 'John Doe' : 'Jane Parent',
+  try {
+    const response = await fetch('http://localhost:5000/api/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
         email: formData.email,
-        role: formData.role
-      };
+        password: formData.password
+      })
+    });
 
-      // Save to localStorage
-      localStorage.setItem('token', 'mock-jwt-token');
-      localStorage.setItem('user', JSON.stringify(mockUser));
-
-      // Update app state
-      setUser(mockUser);
-
-      // Navigate to dashboard
-      navigate('/dashboard');
-    } catch (err) {
-      setError('Login failed. Please try again.');
-    } finally {
-      setLoading(false);
+    // Add detailed error logging
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error('Login error details:', {
+        status: response.status,
+        statusText: response.statusText,
+        errorData: errorData
+      });
+      setError(errorData.msg || `Login failed (${response.status})`);
+      return;
     }
-  };
+
+    const data = await response.json();
+    console.log('Login success:', data); // Log success to see actual response
+
+    localStorage.setItem('token', data.access_token);
+    localStorage.setItem('user', JSON.stringify({
+      id: data.user_id,
+      email: formData.email,
+      role: data.role,
+      name: data.name 
+    }));
+
+    setUser({
+      id: data.user_id,
+      email: formData.email,
+      role: data.role,
+      name: data.name 
+    });
+
+    navigate('/dashboard');
+  } catch (err) {
+    console.error('Network error:', err);
+    setError('Network error. Please try again.');
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className="login-container">

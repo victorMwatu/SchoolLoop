@@ -97,6 +97,75 @@ def get_parents():
         "phone": p.phone
     } for p in parents])
 
+@app.route("/signup", methods=["POST"])
+def signup():
+    data = request.get_json()
+
+    username = data.get("username")
+    email = data.get("email")
+    password = data.get("password")
+    role = data.get("role")
+
+    # --- Basic required fields ---
+    if not username or not email or not password or not role:
+        return jsonify({"message": "Missing required fields: username, email, password, role"}), 400
+
+    # --- Role validation ---
+    if role not in ["student", "teacher", "parent"]:
+        return jsonify({"message": "Invalid role. Must be student, teacher, or parent"}), 400
+
+    # --- Check duplicates ---
+    if User.query.filter((User.username == username) | (User.email == email)).first():
+        return jsonify({"message": "User with that username or email already exists"}), 400
+
+    # --- Create user ---
+    new_user = User(username=username, email=email, role=role)
+    new_user.set_password(password)
+    db.session.add(new_user)
+    db.session.flush()  # get new_user.id
+
+    # --- Role-specific profile validation ---
+    if role == "student":
+        if not data.get("name") or not data.get("student_class"):
+            return jsonify({"message": "Student signup requires name and student_class"}), 400
+        profile = Student(
+            name=data["name"],
+            email=email,
+            student_class=data["student_class"],
+            user_id=new_user.id
+        )
+        db.session.add(profile)
+
+    elif role == "teacher":
+        if not data.get("name") or not data.get("subject"):
+            return jsonify({"message": "Teacher signup requires name and subject"}), 400
+        profile = Teacher(
+            name=data["name"],
+            email=email,
+            subject=data["subject"],
+            user_id=new_user.id
+        )
+        db.session.add(profile)
+
+    elif role == "parent":
+        if not data.get("name") or not data.get("phone"):
+            return jsonify({"message": "Parent signup requires name and phone"}), 400
+        profile = Parent(
+            name=data["name"],
+            email=email,
+            phone=data["phone"],
+            user_id=new_user.id
+        )
+        db.session.add(profile)
+
+    db.session.commit()
+
+    return jsonify({
+        "message": "Signup successful",
+        "role": role,
+        "username": username
+    }), 201
+ 
 @app.route("/login", methods=["POST"])
 def login():
     data = request.get_json()

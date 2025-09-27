@@ -1,12 +1,55 @@
-# React + Vite
+# SchoolLoop
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A web-based school management platform for students, parents, and teachers.
 
-Currently, two official plugins are available:
+## Features
+- User authentication (students, parents, teachers)
+- Assignment management and submissions
+- Messaging between parents and teachers
+- Academic progress tracking
+- School calendar with events and holidays
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Project Structure
+- `server/` — Flask REST API backend (Python)
+- `client/` — React frontend (JavaScript)
 
-## Expanding the ESLint configuration
+## Getting Started
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### Backend Setup (Flask)
+1. Navigate to the `server/` directory:
+   ```bash
+   cd server
+   ```
+2. Install dependencies:
+   ```bash
+   pipenv install
+   ```
+3. Set up the database:
+   ```bash
+   flask db upgrade
+   ```
+4. Run the backend server:
+   ```bash
+   flask run
+   ```
+
+### Frontend Setup (React)
+1. Navigate to the `client/` directory:
+   ```bash
+   cd client
+   ```
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Start the frontend development server:
+   ```bash
+   npm run dev
+   ```
+
+## Usage
+- Access the frontend at `http://localhost:5173` (default Vite port)
+- The backend API runs at `http://localhost:5000`
+
+## License
+This project is licensed under the MIT License.

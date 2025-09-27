@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import AssignmentCreate from './AssignmentCreate';
 import AssignmentList from './AssignmentList';
 import CommunicationCreate from './CommunicationCreate';
-import CommunicationList from './CommunicationList';
+import MessageInbox from './MessageInbox';
 import './TeacherDashboard.css';
 
 function TeacherDashboard() {
@@ -234,16 +234,7 @@ function TeacherDashboard() {
 
         {currentView === 'messages' && (
           <div className="view-content">
-            <div className="content-header">
-              <h1>Communication Center</h1>
-              <button onClick={handleBackToDashboard} className="btn-back">
-                ← Back to Dashboard
-              </button>
-            </div>
-            <CommunicationList 
-              onSendNew={handleSendMessage}
-              onView={handleViewMessage}
-            />
+            <MessageInbox user={user} onBack={handleBackToDashboard} />
           </div>
         )}
 

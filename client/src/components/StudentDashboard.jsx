@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import StudentAssignmentView from './StudentAssignmentView';
-import StudentMessageView from './StudentMessageView';
+import MessageInbox from './MessageInbox';
 import './StudentDashboard.css';
 
 function StudentDashboard({ user }) {
@@ -174,7 +174,7 @@ function StudentDashboard({ user }) {
 
             {currentView === 'messages' && (
               <div className="view-content">
-                <StudentMessageView user={user} onBack={handleBackToDashboard} />
+                <MessageInbox user={user} onBack={handleBackToDashboard} />
               </div>
             )}
 

@@ -8,7 +8,6 @@ import os
 from flask_cors import CORS
 
 # Initialize extensions
-
 db = SQLAlchemy()
 migrate = Migrate()
 api = Api()
@@ -17,7 +16,7 @@ jwt = JWTManager()
 def create_app():
     app = Flask(__name__)
 
-    # Database config
+    # Database config (Postgres on Render)
     BASE_DIR = os.path.abspath(os.path.dirname(__file__))
     app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv(
         "DATABASE_URL",
@@ -29,18 +28,23 @@ def create_app():
     app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY", "super-secret-key")
 
     # Initialize extensions
+    # Only allow your Render frontend to access API
     CORS(app, origins=["https://schoolloop-front.onrender.com"])
     db.init_app(app)
     migrate.init_app(app, db)
     jwt.init_app(app)
 
+    # Root route for health check
+    @app.route("/")
+    def home():
+        return "Backend is running! ✅"
+
     # Import models so migrations detect them
     from app import models  
 
-    # Register resources (API endpoints)
+    # Register API resources
     from app.routes import register_resources
     register_resources(api)
-
     api.init_app(app)
 
     return app

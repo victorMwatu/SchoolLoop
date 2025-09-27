@@ -8,7 +8,6 @@ import './Dashboard.css';
 function ParentDashboard({ user }) {
   const [currentView, setCurrentView] = useState('dashboard');
 
-  // Mock data for child information - later Person 3 will connect to backend
   const [childInfo] = useState({
     name: 'John Doe',
     grade: '10th Grade',
@@ -60,9 +59,8 @@ function ParentDashboard({ user }) {
         <p>Welcome, {user?.name || 'Parent'}!</p>
       </div>
       
-      {/* Child Information Card */}
       <div className="child-info-card">
-        <h3>👨‍🎓 Child Information</h3>
+        <h3>Child Information</h3>
         <div className="child-details">
           <div className="detail-item">
             <strong>Name:</strong> {childInfo.name}
@@ -81,31 +79,28 @@ function ParentDashboard({ user }) {
 
       <div className="dashboard-grid">
         <div className="dashboard-card">
-          <h3>📚 Child's Assignments</h3>
+          <h3>Child's Assignments</h3>
           <p>View your child's assignments, due dates, and progress</p>
           <button className="card-btn" onClick={handleViewAssignments}>
             View Assignments
           </button>
         </div>
-        
         <div className="dashboard-card">
-          <h3>📧 Teacher Messages</h3>
+          <h3>Teacher Messages</h3>
           <p>Read messages from teachers and provide acknowledgments</p>
           <button className="card-btn" onClick={handleViewMessages}>
             View Messages
           </button>
         </div>
-        
         <div className="dashboard-card">
-          <h3>📊 Academic Progress</h3>
+          <h3>Academic Progress</h3>
           <p>Track your child's academic performance and grades</p>
           <button className="card-btn" onClick={handleViewProgress}>
             View Progress
           </button>
         </div>
-        
         <div className="dashboard-card">
-          <h3>📅 School Calendar</h3>
+          <h3>School Calendar</h3>
           <p>View school events, holidays, and important dates</p>
           <button className="card-btn" onClick={handleViewCalendar}>
             View Calendar

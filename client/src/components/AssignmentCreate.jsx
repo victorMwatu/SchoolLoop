@@ -3,7 +3,9 @@ import './Assignment.css';
 import './AssignmentCreate.css';
 import '../styles/design-system.css';
 
-function AssignmentCreate({ onCancel, onSave }) {
+
+// NOTE: You may want to pass classroomId and user (teacher) as props for real use
+function AssignmentCreate({ onCancel, onSave, classroomId = 1 }) {
   const [assignment, setAssignment] = useState({
     title: '',
     description: '',
@@ -61,31 +63,27 @@ function AssignmentCreate({ onCancel, onSave }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    if (!validateForm()) {
-      return;
-    }
-    
+    if (!validateForm()) return;
     setIsSubmitting(true);
-    
     try {
-      // For now, we'll just log it. Later Person 3 will connect to backend
-      console.log('Creating assignment:', assignment);
-      
-      // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // Simulate saving
-      if (onSave) {
-        onSave({
-          ...assignment,
-          id: Date.now(),
-          createdDate: new Date().toISOString(),
-          status: 'active'
-        });
-      }
-      
-      // Reset form
+      const token = localStorage.getItem('token');
+      const payload = {
+        title: assignment.title,
+        description: assignment.description,
+        due_date: assignment.dueDate,
+        classroom_id: classroomId
+      };
+      const res = await fetch('/api/assignments', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(payload)
+      });
+      if (!res.ok) throw new Error('Failed to create assignment');
+      const assignmentId = await res.json();
+      if (onSave) onSave({ ...assignment, id: assignmentId });
       setAssignment({
         title: '',
         description: '',
@@ -97,9 +95,8 @@ function AssignmentCreate({ onCancel, onSave }) {
         allowLateSubmission: true,
         attachments: []
       });
-      
     } catch (error) {
-      console.error('Error creating assignment:', error);
+      alert('Error creating assignment: ' + error.message);
     } finally {
       setIsSubmitting(false);
     }

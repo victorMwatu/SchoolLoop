@@ -71,3 +71,57 @@ class Note(db.Model):
 
     created_by = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+
+# AssignmentSubmission Model
+class AssignmentSubmission(db.Model):
+    __tablename__ = "assignment_submissions"
+
+    id = db.Column(db.Integer, primary_key=True)
+    assignment_id = db.Column(db.Integer, db.ForeignKey("assignments.id"), nullable=False)
+    student_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
+    submitted_at = db.Column(db.DateTime, default=datetime.utcnow)
+    content = db.Column(db.Text, nullable=True)  # e.g., file link or text
+    is_done = db.Column(db.Boolean, default=False)
+    parent_checked = db.Column(db.Boolean, default=False)
+    parent_checked_at = db.Column(db.DateTime, nullable=True)
+    parent_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=True)
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "assignment_id": self.assignment_id,
+            "student_id": self.student_id,
+            "submitted_at": self.submitted_at,
+            "content": self.content,
+            "is_done": self.is_done,
+            "parent_checked": self.parent_checked,
+            "parent_checked_at": self.parent_checked_at,
+            "parent_id": self.parent_id
+        }
+
+# CalendarEvent model for school calendar integration
+class CalendarEvent(db.Model):
+    __tablename__ = 'calendar_events'
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(120), nullable=False)
+    description = db.Column(db.Text)
+    date = db.Column(db.Date, nullable=False)
+    end_date = db.Column(db.Date)
+    type = db.Column(db.String(50))  # e.g., meeting, holiday, event, exam, academic
+    time = db.Column(db.String(50))
+    location = db.Column(db.String(120))
+    is_important = db.Column(db.Boolean, default=False)
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'title': self.title,
+            'description': self.description,
+            'date': self.date.isoformat() if self.date else None,
+            'endDate': self.end_date.isoformat() if self.end_date else None,
+            'type': self.type,
+            'time': self.time,
+            'location': self.location,
+            'isImportant': self.is_important
+        }

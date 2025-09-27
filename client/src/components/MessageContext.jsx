@@ -19,7 +19,7 @@ export const MessageProvider = ({ children, user }) => {
 
   // API configuration matching your backend
   const API_CONFIG = {
-    baseURL: 'http://localhost:5000',
+    baseURL: 'https://schoolloop-2.onrender.com',
     endpoints: {
       getConversations: '/api/messages/conversations',
       sendMessage: '/api/messages/send', 

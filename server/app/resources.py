@@ -3,7 +3,7 @@ from flask_restful import Resource
 from flask import request
 from app import db
 from app.models import User
-from flask_jwt_extended import create_access_token
+from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 
 class SignupResource(Resource):
     def post(self):
@@ -59,3 +59,165 @@ class LoginResource(Resource):
         except Exception as e:
             print("Login error:", str(e))  # Add this to see backend errors
             return {"msg": "Server error during login"}, 500
+
+class MessageResource(Resource):
+    @jwt_required()
+    def get(self):
+        # Get conversations for the current user
+        current_user_id = get_jwt_identity()
+        
+        # Get all conversations where user is involved
+        conversations = Conversation.query.filter(
+            (Conversation.user1_id == current_user_id) | 
+            (Conversation.user2_id == current_user_id)
+        ).all()
+        
+        conversations_data = []
+        total_unread = 0
+        
+        for conv in conversations:
+            # Determine the other participant
+            other_user = conv.user2 if conv.user1_id == current_user_id else conv.user1
+            
+            # Count unread messages in this conversation
+            unread_count = Message.query.filter(
+                Message.conversation_id == conv.id,
+                Message.receiver_id == current_user_id,
+                Message.is_read == False
+            ).count()
+            
+            total_unread += unread_count
+            
+            conversations_data.append({
+                "id": conv.id,
+                "participantId": other_user.id,
+                "participantName": other_user.name,
+                "participantRole": other_user.role,
+                "lastMessage": conv.last_message.content if conv.last_message else "No messages yet",
+                "lastMessageDate": conv.last_message_at.isoformat() if conv.last_message_at else conv.created_at.isoformat(),
+                "unreadCount": unread_count
+            })
+        
+        return {
+            "conversations": conversations_data,
+            "unreadCount": total_unread
+        }, 200
+
+class SendMessageResource(Resource):
+    @jwt_required()
+    def post(self):
+        current_user_id = get_jwt_identity()
+        data = request.get_json()
+        
+        receiver_id = data.get("receiver_id")
+        subject = data.get("subject")
+        content = data.get("content")
+        message_type = data.get("message_type", "general")
+        priority = data.get("priority", "normal")
+        
+        if not all([receiver_id, subject, content]):
+            return {"msg": "Missing required fields"}, 400
+        
+        # Check if receiver exists
+        receiver = User.query.get(receiver_id)
+        if not receiver:
+            return {"msg": "Receiver not found"}, 404
+        
+        # Find or create conversation
+        conversation = Conversation.query.filter(
+            ((Conversation.user1_id == current_user_id) & (Conversation.user2_id == receiver_id)) |
+            ((Conversation.user1_id == receiver_id) & (Conversation.user2_id == current_user_id))
+        ).first()
+        
+        if not conversation:
+            conversation = Conversation(user1_id=current_user_id, user2_id=receiver_id)
+            db.session.add(conversation)
+            db.session.flush()  # Get the conversation ID
+        
+        # Create message
+        message = Message(
+            sender_id=current_user_id,
+            receiver_id=receiver_id,
+            conversation_id=conversation.id,
+            subject=subject,
+            content=content,
+            message_type=message_type,
+            priority=priority
+        )
+        
+        # Update conversation last message
+        conversation.last_message_id = message.id
+        conversation.last_message_at = datetime.utcnow()
+        
+        db.session.add(message)
+        db.session.commit()
+        
+        return {
+            "msg": "Message sent successfully",
+            "messageId": message.id,
+            "conversationId": conversation.id
+        }, 201
+
+class MarkAsReadResource(Resource):
+    @jwt_required()
+    def put(self, message_id):
+        current_user_id = get_jwt_identity()
+        
+        message = Message.query.filter_by(id=message_id, receiver_id=current_user_id).first()
+        if not message:
+            return {"msg": "Message not found"}, 404
+        
+        message.is_read = True
+        db.session.commit()
+        
+        return {"msg": "Message marked as read"}, 200
+
+class ConversationMessagesResource(Resource):
+    @jwt_required()
+    def get(self, conversation_id):
+        current_user_id = get_jwt_identity()
+        
+        # Verify user is part of conversation
+        conversation = Conversation.query.filter_by(id=conversation_id).filter(
+            (Conversation.user1_id == current_user_id) | 
+            (Conversation.user2_id == current_user_id)
+        ).first()
+        
+        if not conversation:
+            return {"msg": "Conversation not found"}, 404
+        
+        messages = Message.query.filter_by(conversation_id=conversation_id).order_by(Message.created_at.asc()).all()
+        
+        messages_data = []
+        for msg in messages:
+            messages_data.append({
+                "id": msg.id,
+                "senderId": msg.sender_id,
+                "senderName": msg.sender.name,
+                "senderRole": msg.sender.role,
+                "content": msg.content,
+                "messageType": msg.message_type,
+                "isRead": msg.is_read,
+                "createdAt": msg.created_at.isoformat()
+            })
+        
+        return {"messages": messages_data}, 200
+
+class UsersResource(Resource):
+    @jwt_required()
+    def get(self):
+        current_user_id = get_jwt_identity()
+        
+        # Get all users except the current user
+        users = User.query.filter(User.id != current_user_id).all()
+        
+        users_data = []
+        for user in users:
+            users_data.append({
+                "id": user.id,
+                "name": user.name,
+                "email": user.email,
+                "role": user.role
+            })
+        
+        return {"users": users_data}, 200

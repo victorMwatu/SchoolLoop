@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import ParentAssignmentView from './ParentAssignmentView';
-import ParentMessageView from './ParentMessageView';
+import MessageInbox from './MessageInbox';
 import ParentProgressView from './ParentProgressView';
 import SchoolCalendarView from './SchoolCalendarView';
 import './Dashboard.css';
@@ -42,7 +42,7 @@ function ParentDashboard({ user }) {
   }
 
   if (currentView === 'messages') {
-    return <ParentMessageView user={user} onBack={handleBackToDashboard} />;
+    return <MessageInbox user={user} onBack={handleBackToDashboard} />;
   }
 
   if (currentView === 'progress') {

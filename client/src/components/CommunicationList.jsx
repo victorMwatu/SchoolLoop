@@ -1,164 +1,76 @@
-import React, { useState } from 'react';
+// CommunicationList.jsx 
+import React from 'react';
+import { useMessages } from './MessageContext';
 import './Communication.css';
 
 function CommunicationList({ onSendNew, onView }) {
-  // Sample data - later Person 3 will connect to backend
-  const [messages] = useState([
-    {
-      id: 1,
-      recipient: 'Sarah Smith (Parent)',
-      recipientType: 'parent',
-      subject: 'Math Progress Update',
-      messageType: 'academic',
-      priority: 'normal',
-      sentDate: '2025-09-24',
-      status: 'delivered',
-      requiresAcknowledgment: true,
-      acknowledged: false,
-      content: 'Sarah has shown excellent improvement in mathematics this week...'
-    },
-    {
-      id: 2,
-      recipient: 'John Doe (Student)',
-      recipientType: 'student',
-      subject: 'Great Work Today!',
-      messageType: 'praise',
-      priority: 'normal',
-      sentDate: '2025-09-24',
-      status: 'read',
-      requiresAcknowledgment: false,
-      acknowledged: false,
-      content: 'John participated excellently in today\'s science experiment...'
-    },
-    {
-      id: 3,
-      recipient: 'Mike Johnson (Parent)',
-      recipientType: 'parent',
-      subject: 'Homework Reminder',
-      messageType: 'reminder',
-      priority: 'high',
-      sentDate: '2025-09-23',
-      status: 'delivered',
-      requiresAcknowledgment: true,
-      acknowledged: true,
-      content: 'Please ensure Mike completes his English assignment by tomorrow...'
-    }
-  ]);
-
-  const getMessageTypeIcon = (type) => {
-    const icons = {
-      general: '',
-      behavior: '',
-      academic: '',
-      attendance: '',
-      reminder: '',
-      praise: ''
-    };
-    return icons[type] || '';
-  };
-
-  const getPriorityClass = (priority) => {
-    return `priority-${priority}`;
-  };
-
-  const getStatusClass = (status, requiresAck, acknowledged) => {
-    if (requiresAck && !acknowledged) {
-      return 'status-pending-ack';
-    }
-    if (requiresAck && acknowledged) {
-      return 'status-acknowledged';
-    }
-    return `status-${status}`;
-  };
+  const { conversations, markAsRead, loading } = useMessages();
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'short',
-      day: 'numeric'
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
     });
   };
+
+  const handleViewMessage = async (conversationId) => {
+    if (onView) {
+      onView(conversationId);
+    }
+    // Mark as read when viewing
+    // You might want to implement this differently based on your backend
+  };
+
+  if (loading) {
+    return <div className="loading">Loading messages...</div>;
+  }
 
   return (
     <div className="communication-list-container">
       <div className="list-header">
-        <h2>Sent Messages</h2>
+        <h2>Messages</h2>
         <button onClick={onSendNew} className="btn-send-new">
           + Send New Message
         </button>
       </div>
 
       <div className="messages-list">
-        {messages.map(message => (
-          <div key={message.id} className="message-card">
+        {conversations.map(conversation => (
+          <div 
+            key={conversation.id} 
+            className={`message-card ${conversation.unreadCount > 0 ? 'unread' : ''}`}
+            onClick={() => handleViewMessage(conversation.id)}
+          >
             <div className="message-header">
               <div className="message-info">
-                <span className="message-icon">
-                  {getMessageTypeIcon(message.messageType)}
-                </span>
+                <div className="message-avatar">
+                  {conversation.participantName.charAt(0).toUpperCase()}
+                </div>
                 <div className="message-details">
-                  <h3>{message.subject}</h3>
-                  <p className="recipient">To: {message.recipient}</p>
+                  <h3>{conversation.participantName}</h3>
+                  <p className="last-message">{conversation.lastMessage}</p>
                 </div>
               </div>
               <div className="message-status">
-                <span className={`priority-badge ${getPriorityClass(message.priority)}`}>
-                  {message.priority}
+                <span className="message-date">
+                  {formatDate(conversation.lastMessageDate)}
                 </span>
-                <span className={`status-badge ${getStatusClass(message.status, message.requiresAcknowledgment, message.acknowledged)}`}>
-                  {message.requiresAcknowledgment ? 
-                    (message.acknowledged ? 'Acknowledged' : 'Pending Signature') : 
-                    message.status
-                  }
-                </span>
+                {conversation.unreadCount > 0 && (
+                  <span className="unread-badge">{conversation.unreadCount}</span>
+                )}
               </div>
-            </div>
-
-            <div className="message-content">
-              <p className="message-preview">
-                {message.content.substring(0, 120)}
-                {message.content.length > 120 ? '...' : ''}
-              </p>
-            </div>
-
-            <div className="message-meta">
-              <div className="message-date">
-                 Sent: {formatDate(message.sentDate)}
-              </div>
-              <div className="message-type">
-                Type: {message.messageType}
-              </div>
-              {message.requiresAcknowledgment && (
-                <div className="acknowledgment-required">
-                   Requires Acknowledgment
-                </div>
-              )}
-            </div>
-
-            <div className="message-actions">
-              <button 
-                onClick={() => onView && onView(message.id)} 
-                className="btn-view-message"
-              >
-                View Full Message
-              </button>
-              {message.requiresAcknowledgment && !message.acknowledged && (
-                <button className="btn-remind">
-                  Send Reminder
-                </button>
-              )}
-              <button className="btn-reply">
-                Reply/Follow Up
-              </button>
             </div>
           </div>
         ))}
       </div>
 
-      {messages.length === 0 && (
+      {conversations.length === 0 && (
         <div className="empty-state">
-          <p>No messages sent yet.</p>
+          <p>No messages yet.</p>
           <button onClick={onSendNew} className="btn-send-new">
             Send Your First Message
           </button>

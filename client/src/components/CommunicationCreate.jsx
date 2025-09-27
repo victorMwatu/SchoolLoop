@@ -1,11 +1,11 @@
-// components/CommunicationCreate.jsx (COMPLETE UPDATED VERSION)
+// components/CommunicationCreate.jsx 
 import React, { useState, useEffect } from 'react';
 import { useMessages } from './MessageContext';
 import './Communication.css';
 
 function CommunicationCreate({ onCancel, onSend, user }) {
   const [message, setMessage] = useState({
-    recipientId: '',      // Now stores user ID (number)
+    recipientId: '',      
     recipientType: 'student',
     subject: '',
     messageType: 'general',
@@ -69,7 +69,7 @@ function CommunicationCreate({ onCancel, onSend, user }) {
 
     // Prepare message data for sending
     const messageData = {
-      recipientId: message.recipientId, // This is the actual user ID
+      recipientId: message.recipientId,
       subject: message.subject.trim(),
       content: message.content.trim(),
       messageType: message.messageType,

@@ -196,10 +196,10 @@ class LoginResource(Resource):
                 "access_token": token,
                 "role": user.role,
                 "user_id": user.id,
-                "name": user.name  # Make sure this line is correct
+                "name": user.name  
             }, 200
         except Exception as e:
-            print("Login error:", str(e))  # Add this to see backend errors
+            print("Login error:", str(e))  
             return {"msg": "Server error during login"}, 500
 
 class MessageResource(Resource):

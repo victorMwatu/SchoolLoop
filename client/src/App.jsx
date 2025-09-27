@@ -59,7 +59,7 @@ function App() {
     <Router>
       <div className="App">
         <MessageProvider user={user}>
-          {/* Only show Navigation on dashboard pages, not on Home page */}
+          
           {user && <Navigation user={user} setUser={setUser} />}
           
           <Routes>

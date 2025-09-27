@@ -21,8 +21,7 @@ function CommunicationList({ onSendNew, onView }) {
     if (onView) {
       onView(conversationId);
     }
-    // Mark as read when viewing
-    // You might want to implement this differently based on your backend
+    
   };
 
   if (loading) {

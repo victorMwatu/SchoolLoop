@@ -29,7 +29,7 @@ def create_app():
     app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY", "super-secret-key")
 
     # Initialize extensions
-    CORS(app)
+    CORS(app, origins=["https://schoolloop-front.onrender.com"])
     db.init_app(app)
     migrate.init_app(app, db)
     jwt.init_app(app)

@@ -1,0 +1,14 @@
+# Python cache
+_pycache_/
+*.pyc
+
+# Virtual environments
+venv/
+.venv/
+
+# Flask/Instance files
+instance/
+*.db
+
+# Backup files
+*.save

@@ -20,7 +20,7 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
-    password_hash = db.Column(db.String(128), nullable=False)
+    password_hash = db.Column(db.Text, nullable=False)
     role = db.Column(db.String(20), default="student")
 
     def set_password(self, password):
@@ -95,14 +95,16 @@ class Conversation(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user1_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
     user2_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
-    last_message_id = db.Column(db.Integer, db.ForeignKey("messages.id"), nullable=True)
-    last_message_at = db.Column(db.DateTime, default=datetime.utcnow)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     user1 = db.relationship("User", foreign_keys=[user1_id])
     user2 = db.relationship("User", foreign_keys=[user2_id])
-    last_message = db.relationship("Message", foreign_keys=[last_message_id])
-    
+
+    messages = db.relationship("Message", backref="conversation", lazy="dynamic")
+
+    @property
+    def last_message(self):
+        return self.messages.order_by(Message.created_at.desc()).first()
 
 # AssignmentSubmission Model
 class AssignmentSubmission(db.Model):

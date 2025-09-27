@@ -1,5 +1,12 @@
 from flask import Flask
 from app.models import db, User, RoleEnum  # import from app/models.py
+from app import create_app, db
+
+app = create_app()   
+
+with app.app_context():
+    db.create_all()
+
 
 def create_app():
     app = Flask(__name__)
@@ -44,3 +51,4 @@ if __name__== "__main__":
         db.create_all()  # create tables from models.py
 
     app.run(debug=True)
+

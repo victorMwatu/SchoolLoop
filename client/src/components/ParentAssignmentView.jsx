@@ -1,87 +1,64 @@
-import React, { useState } from 'react';
-import './Parent.css';
-import './ParentDashboard.css';
-import '../styles/design-system.css';
-
 function ParentAssignmentView({ user, onBack }) {
-  // Sample assignments data - later Person 3 will connect to backend
-  const [assignments] = useState([
-    {
-      id: 1,
-      title: 'Math Homework Chapter 5',
-      subject: 'Mathematics',
-      teacher: 'Mrs. Johnson',
-      assignedDate: '2025-09-20',
-      dueDate: '2025-09-27',
-      status: 'pending',
-      description: 'Complete exercises 1-15 on page 87. Show all work and include explanations for word problems.',
-      points: 50,
-      submissionStatus: 'not_submitted',
-      grade: null,
-      feedback: null,
-      priority: 'normal'
-    },
-    {
-      id: 2,
-      title: 'Science Lab Report - Photosynthesis',
-      subject: 'Science',
-      teacher: 'Mr. Davis',
-      assignedDate: '2025-09-18',
-      dueDate: '2025-09-26',
-      status: 'urgent', // Due tomorrow
-      description: 'Write a detailed lab report on the photosynthesis experiment. Include hypothesis, methodology, results, and conclusion.',
-      points: 75,
-      submissionStatus: 'not_submitted',
-      grade: null,
-      feedback: null,
-      priority: 'high'
-    },
-    {
-      id: 3,
-      title: 'English Essay - Character Analysis',
-      subject: 'English Literature',
-      teacher: 'Ms. Wilson',
-      assignedDate: '2025-09-15',
-      dueDate: '2025-09-22',
-      status: 'overdue',
-      description: 'Write a 500-word character analysis of the protagonist in "To Kill a Mockingbird". Focus on character development and key themes.',
-      points: 100,
-      submissionStatus: 'submitted',
-      grade: 85,
-      feedback: 'Good analysis, but could use more specific examples from the text.',
-      priority: 'high'
-    },
-    {
-      id: 4,
-      title: 'History Project - World War II Timeline',
-      subject: 'History',
-      teacher: 'Mr. Brown',
-      assignedDate: '2025-09-10',
-      dueDate: '2025-09-30',
-      status: 'pending',
-      description: 'Create a detailed timeline of major World War II events with explanations and visual elements.',
-      points: 150,
-      submissionStatus: 'in_progress',
-      grade: null,
-      feedback: null,
-      priority: 'normal'
-    },
-    {
-      id: 5,
-      title: 'French Vocabulary Quiz Prep',
-      subject: 'French',
-      teacher: 'Mme. Martin',
-      assignedDate: '2025-09-23',
-      dueDate: '2025-09-28',
-      status: 'completed',
-      description: 'Study vocabulary list for Unit 3. Quiz will cover 50 words and phrases.',
-      points: 25,
-      submissionStatus: 'completed',
-      grade: 92,
-      feedback: 'Excellent work! Keep practicing pronunciation.',
-      priority: 'normal'
+  const [assignments, setAssignments] = useState([]);
+  const [submissions, setSubmissions] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [confirmingId, setConfirmingId] = useState(null);
+  // For demo, assume parent's child is user.child_id or user.childId
+  const childId = user?.child_id || user?.childId || 2; // fallback to 2
+  useEffect(() => {
+    const fetchAssignmentsAndSubmissions = async () => {
+      setLoading(true);
+      try {
+        const token = localStorage.getItem('token');
+        // Fetch assignments
+        const resA = await fetch('/api/assignments', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const assignmentsData = await resA.json();
+        setAssignments(assignmentsData);
+        // Fetch submissions for this child
+        const resS = await fetch(`/api/assignment_submissions?student_id=${childId}`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const submissionsData = await resS.json();
+        setSubmissions(submissionsData);
+      } catch (err) {
+        setAssignments([]);
+        setSubmissions([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchAssignmentsAndSubmissions();
+  }, [childId]);
+
+  const getSubmissionForAssignment = (assignmentId) =>
+    submissions.find(s => s.assignment_id === assignmentId);
+
+  const handleConfirmAssignment = async (submissionId) => {
+    setConfirmingId(submissionId);
+    try {
+      const token = localStorage.getItem('token');
+      await fetch('/api/parent_confirmations', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ submission_id: submissionId })
+      });
+      // Refresh submissions
+      const resS = await fetch(`/api/assignment_submissions?student_id=${childId}`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      const submissionsData = await resS.json();
+      setSubmissions(submissionsData);
+    } catch (err) {
+      alert('Error confirming assignment');
+    } finally {
+      setConfirmingId(null);
     }
-  ]);
+  };
 
   const getStatusClass = (status) => {
     switch (status) {
@@ -210,78 +187,48 @@ function ParentAssignmentView({ user, onBack }) {
           </div>
           
           <div className="assignments-list">
-            {assignments.map(assignment => (
-              <div key={assignment.id} className="assignment-item card">
-                <div className="assignment-item-header">
-                  <div className="assignment-meta">
-                    <span className="subject-icon">{getSubjectIcon(assignment.subject)}</span>
-                    <div className="assignment-info">
-                      <h3 className="font-semibold text-lg text-gray-800">{assignment.title}</h3>
-                      <p className="text-sm text-gray-600">{assignment.subject} • {assignment.teacher}</p>
-                    </div>
-                  </div>
-                  <div className="assignment-status">
-                    <div className={`assignment-status-badge ${assignment.submissionStatus === 'completed' ? 'badge-success' : 
-                      assignment.submissionStatus === 'submitted' ? 'badge-info' : 
-                      assignment.submissionStatus === 'in_progress' ? 'badge-warning' : 'badge-error'}`}>
-                      {getSubmissionStatusText(assignment.submissionStatus)}
-                    </div>
-                  </div>
-                </div>
-
-                <div className="assignment-item-content">
-                  <p className="text-gray-700 mb-4">{assignment.description}</p>
-                  
-                  <div className="assignment-details-grid">
-                    <div className="detail-item">
-                      <span className="detail-label">Due Date</span>
-                      <span className={`detail-value ${assignment.status === 'overdue' ? 'text-red-600 font-medium' : 
-                        assignment.status === 'urgent' ? 'text-orange-600 font-medium' : 'text-gray-700'}`}>
-                        {new Date(assignment.dueDate).toLocaleDateString()}
-                        <span className="text-xs block text-gray-500">{getDaysUntilDue(assignment.dueDate)}</span>
-                      </span>
-                    </div>
-                    
-                    <div className="detail-item">
-                      <span className="detail-label">Points</span>
-                      <span className="detail-value">{assignment.points} pts</span>
-                    </div>
-                    
-                    {assignment.grade && (
-                      <div className="detail-item">
-                        <span className="detail-label">Grade</span>
-                        <span className={`detail-value font-semibold ${assignment.grade >= 80 ? 'text-green-600' : 
-                          assignment.grade >= 70 ? 'text-yellow-600' : 'text-red-600'}`}>
-                          {assignment.grade}/{assignment.points} ({Math.round((assignment.grade/assignment.points)*100)}%)
-                        </span>
+            {loading ? (
+              <div>Loading assignments...</div>
+            ) : assignments.map(assignment => {
+              const submission = getSubmissionForAssignment(assignment.id);
+              return (
+                <div key={assignment.id} className="assignment-item card">
+                  <div className="assignment-item-header">
+                    <div className="assignment-meta">
+                      <span className="subject-icon">{getSubjectIcon(assignment.subject)}</span>
+                      <div className="assignment-info">
+                        <h3 className="font-semibold text-lg text-gray-800">{assignment.title}</h3>
+                        <p className="text-sm text-gray-600">{assignment.subject}</p>
                       </div>
+                    </div>
+                    <div className="assignment-status">
+                      <div className={`assignment-status-badge ${submission?.parent_checked ? 'badge-success' : submission ? 'badge-info' : 'badge-error'}`}>
+                        {submission?.parent_checked ? 'Parent Checked' : submission ? 'Submitted' : 'Not Submitted'}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="assignment-item-content">
+                    <p className="text-gray-700 mb-4">{assignment.description}</p>
+                    <div className="assignment-details-grid">
+                      <div className="detail-item">
+                        <span className="detail-label">Due Date</span>
+                        <span className="detail-value">{assignment.due_date ? new Date(assignment.due_date).toLocaleDateString() : ''}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="assignment-item-actions">
+                    {submission && !submission.parent_checked && (
+                      <button className="btn btn-primary btn-sm" disabled={confirmingId === submission.id} onClick={() => handleConfirmAssignment(submission.id)}>
+                        {confirmingId === submission.id ? 'Confirming...' : 'Mark as Checked'}
+                      </button>
+                    )}
+                    {submission?.parent_checked && (
+                      <span className="parent-confirmed-label">✔️ Checked by Parent</span>
                     )}
                   </div>
-
-                  {assignment.feedback && (
-                    <div className="teacher-feedback-box">
-                      <h4 className="feedback-label">Teacher Feedback</h4>
-                      <p className="feedback-text">{assignment.feedback}</p>
-                    </div>
-                  )}
                 </div>
-
-                <div className="assignment-item-actions">
-                  <button 
-                    className="btn btn-primary btn-sm"
-                    onClick={() => handleViewDetails(assignment)}
-                  >
-                    View Full Details
-                  </button>
-                  <button 
-                    className="btn btn-secondary btn-sm"
-                    onClick={() => handleContactTeacher(assignment.teacher, assignment.subject)}
-                  >
-                    Contact {assignment.teacher.split(' ')[1]}
-                  </button>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
 
           {assignments.length === 0 && (
@@ -340,5 +287,4 @@ function ParentAssignmentView({ user, onBack }) {
     </div>
   );
 }
-
 export default ParentAssignmentView;

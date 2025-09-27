@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import StudentAssignmentView from './StudentAssignmentView';
 import MessageInbox from './MessageInbox';
+import SchoolCalendarView from './SchoolCalendarView';
 import './StudentDashboard.css';
 
 function StudentDashboard({ user }) {
@@ -18,7 +19,6 @@ function StudentDashboard({ user }) {
     setCurrentView('dashboard');
   };
 
-  // Sample data for the dashboard
   const upcomingAssignments = [
     { id: 1, assignment: 'React Calculator App', class: 'Frontend Development', dueDate: '2025-09-28', status: 'In Progress' },
     { id: 2, assignment: 'API Integration Project', class: 'Backend Development', dueDate: '2025-09-30', status: 'Not Started' },
@@ -41,12 +41,12 @@ function StudentDashboard({ user }) {
   ];
 
   const navigationItems = [
-    { id: 'dashboard', icon: '🏠', label: 'Home', active: true },
-    { id: 'assignments', icon: '📝', label: 'Assignments' },
-    { id: 'classes', icon: '👥', label: 'Classes' },
-    { id: 'calendar', icon: '📅', label: 'Calendar' },
-    { id: 'messages', icon: '💬', label: 'Messages' },
-    { id: 'settings', icon: '⚙️', label: 'Settings' },
+    { id: 'dashboard', label: 'Home', active: true },
+    { id: 'assignments', label: 'Assignments' },
+    { id: 'classes', label: 'Classes' },
+    { id: 'calendar', label: 'Calendar' },
+    { id: 'messages', label: 'Messages' },
+    { id: 'settings', label: 'Settings' },
   ];
 
   const getStatusBadge = (status) => {
@@ -88,7 +88,7 @@ function StudentDashboard({ user }) {
                 setCurrentView(item.id);
               }}
             >
-              <span className="nav-icon">{item.icon}</span>
+              {/* icon removed */}
               <span className="nav-label">{item.label}</span>
             </a>
           ))}
@@ -178,13 +178,20 @@ function StudentDashboard({ user }) {
               </div>
             )}
 
+            {/* Calendar view for students */}
+            {currentView === 'calendar' && (
+              <div className="view-content">
+                <SchoolCalendarView user={user} onBack={handleBackToDashboard} />
+              </div>
+            )}
+
             {/* Default views for other nav items */}
-            {['classes', 'calendar', 'settings'].includes(currentView) && (
+            {['classes', 'settings'].includes(currentView) && (
               <div className="view-content">
                 <div className="content-header">
                   <h1>{currentView.charAt(0).toUpperCase() + currentView.slice(1)}</h1>
                   <button onClick={handleBackToDashboard} className="btn-back">
-                    ← Back to Dashboard
+                    Back to Dashboard
                   </button>
                 </div>
                 <div className="section-card">

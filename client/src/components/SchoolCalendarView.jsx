@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import './Parent.css';
 
 function SchoolCalendarView({ user, onBack }) {
-  // Mock calendar events - later Person 3 will connect to backend
   const [calendarEvents] = useState([
     {
       id: 1,
@@ -98,17 +97,6 @@ function SchoolCalendarView({ user, onBack }) {
     'July', 'August', 'September', 'October', 'November', 'December'
   ];
 
-  const getEventTypeIcon = (type) => {
-    switch (type) {
-      case 'meeting': return '👥';
-      case 'holiday': return '🏖️';
-      case 'event': return '🎉';
-      case 'exam': return '📝';
-      case 'academic': return '📊';
-      default: return '📅';
-    }
-  };
-
   const getEventTypeClass = (type) => {
     switch (type) {
       case 'meeting': return 'event-meeting';
@@ -131,7 +119,7 @@ function SchoolCalendarView({ user, onBack }) {
   };
 
   const isUpcoming = (date) => {
-    const today = new Date('2025-09-25'); // Current date
+    const today = new Date('2025-09-25');
     const eventDate = new Date(date);
     return eventDate >= today;
   };
@@ -139,13 +127,8 @@ function SchoolCalendarView({ user, onBack }) {
   const sortedEvents = calendarEvents.sort((a, b) => new Date(a.date) - new Date(b.date));
   const upcomingEvents = sortedEvents.filter(event => isUpcoming(event.date));
 
-  const handleAddToCalendar = (event) => {
-    alert(`"Add to Calendar" feature for "${event.title}" will be implemented with calendar integration.`);
-  };
-
-  const handleEventDetails = (event) => {
-    alert(`Detailed view for "${event.title}" will show full event information and registration options.`);
-  };
+  const handleAddToCalendar = (event) => {};
+  const handleEventDetails = (event) => {};
 
   return (
     <div className="parent-view-container">
@@ -156,7 +139,7 @@ function SchoolCalendarView({ user, onBack }) {
         <h2>School Calendar</h2>
       </div>
 
-      {/* Calendar Header */}
+      
       <div className="calendar-header">
         <div className="calendar-controls">
           <select 
@@ -182,38 +165,14 @@ function SchoolCalendarView({ user, onBack }) {
         </div>
       </div>
 
-      {/* Event Categories Legend */}
-      <div className="event-legend">
-        <div className="legend-item">
-          <span className="legend-dot event-meeting"></span>
-          <span>Meetings</span>
-        </div>
-        <div className="legend-item">
-          <span className="legend-dot event-exam"></span>
-          <span>Exams</span>
-        </div>
-        <div className="legend-item">
-          <span className="legend-dot event-school"></span>
-          <span>School Events</span>
-        </div>
-        <div className="legend-item">
-          <span className="legend-dot event-holiday"></span>
-          <span>Holidays</span>
-        </div>
-        <div className="legend-item">
-          <span className="legend-dot event-academic"></span>
-          <span>Academic</span>
-        </div>
-      </div>
 
-      {/* Upcoming Events */}
+
       <div className="upcoming-events-section">
         <h3>Upcoming Events</h3>
         <div className="events-grid">
           {upcomingEvents.slice(0, 6).map(event => (
             <div key={event.id} className={`calendar-event-card ${getEventTypeClass(event.type)} ${event.isImportant ? 'important' : ''}`}>
               <div className="event-header">
-                <div className="event-icon">{getEventTypeIcon(event.type)}</div>
                 <div className="event-date-info">
                   <h4>{event.title}</h4>
                   <p className="event-date">{formatEventDate(event.date, event.endDate)}</p>
@@ -221,14 +180,12 @@ function SchoolCalendarView({ user, onBack }) {
                 </div>
                 {event.isImportant && <div className="important-badge">Important</div>}
               </div>
-              
               <div className="event-details">
                 <p className="event-description">{event.description}</p>
                 {event.location && (
-                  <p className="event-location">📍 {event.location}</p>
+                  <p className="event-location">{event.location}</p>
                 )}
               </div>
-
               <div className="event-actions">
                 <button 
                   className="btn-event-details"
@@ -248,7 +205,6 @@ function SchoolCalendarView({ user, onBack }) {
         </div>
       </div>
 
-      {/* All Events List */}
       <div className="all-events-section">
         <h3>All School Events</h3>
         <div className="events-timeline">
@@ -257,16 +213,15 @@ function SchoolCalendarView({ user, onBack }) {
               <div className="timeline-marker"></div>
               <div className="timeline-content">
                 <div className="timeline-header">
-                  <span className="timeline-icon">{getEventTypeIcon(event.type)}</span>
                   <h4>{event.title}</h4>
                   <span className="timeline-date">{formatEventDate(event.date, event.endDate)}</span>
                 </div>
                 <p className="timeline-description">{event.description}</p>
                 {event.location && (
-                  <p className="timeline-location">📍 {event.location}</p>
+                  <p className="timeline-location">{event.location}</p>
                 )}
                 {event.time && (
-                  <p className="timeline-time">🕐 {event.time}</p>
+                  <p className="timeline-time">{event.time}</p>
                 )}
               </div>
             </div>

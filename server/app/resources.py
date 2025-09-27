@@ -5,6 +5,7 @@ from app import db
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 from app.models import User, Assignment, AssignmentSubmission, CalendarEvent
 from datetime import datetime
+from app.models import User, Conversation, Message
 # Calendar Event Resource
 
 class CalendarEventResource(Resource):
